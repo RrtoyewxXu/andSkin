@@ -1,5 +1,7 @@
 # andSkin 
 支持原apk里面的资源切换和支持外部插件更换资源，但是现在只支持颜色和drawable，但是我感觉在设计的时候，方便扩展。当然对于在模式设计的问题可以一起探讨。
+##效果图
+![](images/example.gif)
 ##运行本例子
 1. 运行plugin
 2. 生成的plugin.apk adb push 到 /data/data/com.rrtoyewx.andskin/cache/文件里面
