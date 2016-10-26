@@ -14,16 +14,11 @@ public abstract class BaseSkinAttr {
     protected String mAttrType;
     protected String mAttrName;
     protected String mAttrValueRef;
-    protected String mAttrValueSuffix;
 
-    public BaseSkinAttr() {
-    }
-
-    public BaseSkinAttr(String mAttrType, String mAttrName, String mAttrValueRef, String mSuffix) {
+    public BaseSkinAttr(String mAttrType, String mAttrName, String mAttrValueRef) {
         this.mAttrType = mAttrType;
         this.mAttrName = mAttrName;
         this.mAttrValueRef = mAttrValueRef;
-        this.mAttrValueSuffix = mSuffix;
     }
 
     @Override
@@ -32,7 +27,6 @@ public abstract class BaseSkinAttr {
                 "mAttrType='" + mAttrType + '\'' +
                 ", mAttrName='" + mAttrName + '\'' +
                 ", mAttrValueRef='" + mAttrValueRef + '\'' +
-                ", mAttrValueSuffix='" + mAttrValueSuffix + '\'' +
                 '}';
     }
 

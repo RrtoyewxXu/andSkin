@@ -10,9 +10,6 @@ import com.rrtoyewx.andskinlibrary.util.SkinL;
  */
 
 public class GlobalManager {
-    private String mPluginPackageName;
-    private String mResourceSuffix;
-
     private String mPackageName;
     private Context mApplicationContext;
 
@@ -21,7 +18,7 @@ public class GlobalManager {
         return GlobalManagerHolder.sGlobalManger;
     }
 
-    static class GlobalManagerHolder {
+    private static class GlobalManagerHolder {
         private static GlobalManager sGlobalManger = new GlobalManager();
     }
 

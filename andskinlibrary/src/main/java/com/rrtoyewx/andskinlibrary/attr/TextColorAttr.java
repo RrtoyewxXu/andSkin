@@ -4,6 +4,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.rrtoyewx.andskinlibrary.base.BaseSkinAttr;
+import com.rrtoyewx.andskinlibrary.manager.ResourceManager;
 import com.rrtoyewx.andskinlibrary.util.SkinL;
 
 /**
@@ -12,12 +13,16 @@ import com.rrtoyewx.andskinlibrary.util.SkinL;
  */
 
 public class TextColorAttr extends BaseSkinAttr {
+
+    public TextColorAttr(String mAttrType, String mAttrName, String mAttrValueRef) {
+        super(mAttrType, mAttrName, mAttrValueRef);
+    }
+
     @Override
     public void apply(View view) {
         if (view instanceof TextView && TYPE_ATTR_COLOR.equals(mAttrType)) {
-            // TODO: 2016/10/24 set color
-            ((TextView) view).setTextColor(-1);
-            SkinL.d(view + " : " + mAttrName + " apply " + mAttrValueRef + mAttrValueSuffix);
+            ((TextView) view).setTextColor(ResourceManager.getDefault().getDataResource().getColorByName(mAttrValueRef));
+            SkinL.d(view + " : " + mAttrName + " apply " + mAttrValueRef);
         }
     }
 }

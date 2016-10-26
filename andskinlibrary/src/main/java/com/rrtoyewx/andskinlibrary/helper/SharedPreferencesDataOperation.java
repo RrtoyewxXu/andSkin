@@ -15,19 +15,6 @@ public class SharedPreferencesDataOperation implements IDataOperation {
     private static SharedPreferencesDataOperation sAndSkinSharedPreferencesHelper;
     private static SharedPreferences sAndSkinSharedPreferences;
 
-
-    public static SharedPreferencesDataOperation getDefault(Context context) {
-        if (sAndSkinSharedPreferencesHelper == null) {
-            synchronized (SharedPreferencesDataOperation.class) {
-                if (sAndSkinSharedPreferencesHelper == null) {
-                    sAndSkinSharedPreferencesHelper = new SharedPreferencesDataOperation(context);
-                }
-            }
-        }
-
-        return sAndSkinSharedPreferencesHelper;
-    }
-
     public SharedPreferencesDataOperation(Context context) {
         sAndSkinSharedPreferences = context.getSharedPreferences(NAME_SHARE_PREFERENCES, Context.MODE_PRIVATE);
     }

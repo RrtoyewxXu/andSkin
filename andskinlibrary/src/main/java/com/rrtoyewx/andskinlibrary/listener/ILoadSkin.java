@@ -6,15 +6,18 @@ package com.rrtoyewx.andskinlibrary.listener;
 
 public interface ILoadSkin {
     /**
-     * load local skon
-     * @param suffix
+     * load local skin
+     *
+     * @param suffix :the suffix of resource of name
      */
-    void changeSkin(String suffix);
+    boolean loadSkin(String suffix);
 
     /**
      * load remote plugin
-     * @param pluginName
-     * @param suffix
+     *
+     * @param pluginPackageName : the name of plugin
+     * @param suffix            : the suffix of resource of name
+     * @param pluginPath        : the path of plugin
      */
-    void changeSkin(String pluginName, String suffix);
+    boolean loadSkin(String pluginPackageName, String pluginPath, String suffix);
 }

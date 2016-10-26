@@ -28,8 +28,12 @@ public class SkinView {
         return mSkinView;
     }
 
-    public void setmSkinView(View mSkinView) {
-        this.mSkinView = mSkinView;
+    public void setSkinView(View skinView) {
+        this.mSkinView = skinView;
+    }
+
+    public void setSkinAttrList(List<BaseSkinAttr> skinAttrList) {
+        this.mSkinAttrList = skinAttrList;
     }
 
     public void apply() {

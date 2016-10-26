@@ -18,11 +18,15 @@ public abstract class Resource {
     protected Context mContext;
     protected Resources mResources;
     protected String mResourcesSuffix;
-    protected String mPluginPath;
 
-    public Resource(Context baseSkinActivity, String resourcesSuffix) {
+    protected String mPluginPath;
+    protected String mPluginPackageName;
+
+    public Resource(Context baseSkinActivity, String pluginPackageName, String pluginPath, String resourcesSuffix) {
         this.mContext = baseSkinActivity;
+        this.mPluginPackageName = pluginPackageName;
         this.mResourcesSuffix = resourcesSuffix;
+        this.mPluginPath = pluginPath;
     }
 
     public abstract int getColorByName(String colorResName);

@@ -14,9 +14,9 @@ import com.rrtoyewx.andskinlibrary.util.SkinL;
 
 public class LocalResources extends Resource {
 
-    public LocalResources(Context context, String resourcesSuffix) {
-        super(context, resourcesSuffix);
-        mResources = context.getResources();
+    public LocalResources(Context baseSkinActivity, String pluginPackageName, String pluginPath, String resourcesSuffix) {
+        super(baseSkinActivity, pluginPackageName, pluginPath, resourcesSuffix);
+        mResources = baseSkinActivity.getResources();
     }
 
     @Override
