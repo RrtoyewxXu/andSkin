@@ -2,51 +2,68 @@ package com.rrtoyewx.andskinlibrary.attr;
 
 import android.view.View;
 
-import com.rrtoyewx.andskinlibrary.base.BaseSkinAttr;
+import com.rrtoyewx.andskinlibrary.interfaces.IChangeSkin;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by Rrtoyewx on 2016/10/24.
+ * 存储这个view的下面的在换肤的操作的下所需要更改的属性。
+ * 需要换肤的view必须申明的在xml文件必须要有id属性，不然即使设置了skin:enable = "true",也会选择放弃。注意log
  */
 
-public class SkinView {
+public class SkinView implements IChangeSkin {
+    private int mViewId;
     private List<BaseSkinAttr> mSkinAttrList;
-    private View mSkinView;
+    private View mView;
 
     public SkinView() {
-        this(null);
+        this(-1);
     }
 
-    public SkinView(View view) {
+    public SkinView(int viewId) {
+        this(viewId, null);
+    }
+
+    public SkinView(int viewId, View view) {
+        this.mViewId = viewId;
         this.mSkinAttrList = new ArrayList<>();
-        this.mSkinView = view;
+        this.mView = view;
     }
 
-    public View getmSkinView() {
-        return mSkinView;
+    public View getView() {
+        return mView;
     }
 
     public void setSkinView(View skinView) {
-        this.mSkinView = skinView;
+        this.mView = skinView;
     }
 
     public void setSkinAttrList(List<BaseSkinAttr> skinAttrList) {
         this.mSkinAttrList = skinAttrList;
     }
 
-    public void apply() {
-        for (BaseSkinAttr attr : mSkinAttrList) {
-            attr.apply(mSkinView);
-        }
+    public void setViewId(int viewId) {
+        this.mViewId = viewId;
+    }
+
+    public int getViewId() {
+        return mViewId;
     }
 
     @Override
     public String toString() {
         return "SkinView{" +
                 "mSkinAttrList=" + mSkinAttrList +
-                ", mSkinView=" + mSkinView +
+                ", mView=" + mView +
                 '}';
+    }
+
+    @Override
+    public void onChangeSkin() {
+        for (BaseSkinAttr attr : mSkinAttrList) {
+            attr.applySkin(mView);
+        }
     }
 }

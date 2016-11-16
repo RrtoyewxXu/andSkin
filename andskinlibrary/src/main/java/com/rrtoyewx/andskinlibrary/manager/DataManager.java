@@ -3,30 +3,30 @@ package com.rrtoyewx.andskinlibrary.manager;
 import android.content.Context;
 
 import com.rrtoyewx.andskinlibrary.factory.DataOperationFactory;
-import com.rrtoyewx.andskinlibrary.listener.ILoadSkin;
-import com.rrtoyewx.andskinlibrary.listener.IDataOperation;
+import com.rrtoyewx.andskinlibrary.interfaces.ILoadSkin;
+import com.rrtoyewx.andskinlibrary.interfaces.IDataManipulation;
 import com.rrtoyewx.andskinlibrary.util.SkinL;
 
 /**
  * Created by Rrtoyewx on 2016/10/24.
  */
 
-public class DataOperationManager implements ILoadSkin {
+public class DataManager implements ILoadSkin {
     private static final String KEY_PLUGIN_PATH = "plugin_path";
     private static final String KEY_RESOURCE_SUFFIX = "plugin_resource_suffix";
     private static final String KEY_PLUGIN_PACKAGE_NAME = "plugin_package_name";
 
-    private IDataOperation mDataOperation;
+    private IDataManipulation mDataOperation;
 
-    public DataOperationManager() {
+    public DataManager() {
     }
 
-    private static class DataOperationManagerHolder {
-        static DataOperationManager sDataOperationManager = new DataOperationManager();
+    private static class DataManagerHolder {
+        static DataManager sDataOperationManager = new DataManager();
     }
 
-    public static DataOperationManager getDefault() {
-        return DataOperationManagerHolder.sDataOperationManager;
+    public static DataManager getDefault() {
+        return DataManagerHolder.sDataOperationManager;
     }
 
     public void init(Context context) {

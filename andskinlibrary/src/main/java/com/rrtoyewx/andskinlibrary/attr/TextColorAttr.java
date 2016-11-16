@@ -3,7 +3,6 @@ package com.rrtoyewx.andskinlibrary.attr;
 import android.view.View;
 import android.widget.TextView;
 
-import com.rrtoyewx.andskinlibrary.base.BaseSkinAttr;
 import com.rrtoyewx.andskinlibrary.manager.ResourceManager;
 import com.rrtoyewx.andskinlibrary.util.SkinL;
 
@@ -19,7 +18,7 @@ public class TextColorAttr extends BaseSkinAttr {
     }
 
     @Override
-    public void apply(View view) {
+    public void applySkin(View view) {
         if (view instanceof TextView && TYPE_ATTR_COLOR.equals(mAttrType)) {
             ((TextView) view).setTextColor(ResourceManager.getDefault().getDataResource().getColorByName(mAttrValueRef));
             SkinL.d(view + " : " + mAttrName + " apply " + mAttrValueRef);

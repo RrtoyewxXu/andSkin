@@ -4,7 +4,7 @@ import com.rrtoyewx.andskinlibrary.dataresource.PluginResource;
 import com.rrtoyewx.andskinlibrary.dataresource.Resource;
 import com.rrtoyewx.andskinlibrary.dataresource.LocalResources;
 import com.rrtoyewx.andskinlibrary.factory.ResourceFactory;
-import com.rrtoyewx.andskinlibrary.listener.ILoadSkin;
+import com.rrtoyewx.andskinlibrary.interfaces.ILoadSkin;
 import com.rrtoyewx.andskinlibrary.util.SkinL;
 
 /**
@@ -26,9 +26,9 @@ public class ResourceManager implements ILoadSkin {
     }
 
     public void init() {
-        String pluginPackageName = DataOperationManager.getDefault().getPluginPackageName();
-        String suffix = DataOperationManager.getDefault().getResourceSuffix();
-        String pluginPath = DataOperationManager.getDefault().getPluginPath();
+        String pluginPackageName = DataManager.getDefault().getPluginPackageName();
+        String suffix = DataManager.getDefault().getResourceSuffix();
+        String pluginPath = DataManager.getDefault().getPluginPath();
         SkinL.d("------------resource manager init begin----");
         SkinL.d("resource manager init pluginPackageName: " + pluginPackageName + " suffix: " + suffix + "" + " pluginPath " + pluginPath);
         SkinL.d("------------resource manager init finish----");
@@ -62,9 +62,9 @@ public class ResourceManager implements ILoadSkin {
         } else if (mDataResource instanceof PluginResource) {
             // last resource is PluginResource and this resources same as last do not need create
             return !(!GlobalManager.getDefault().getPackageName().equals(pluginPackageName)
-                    && DataOperationManager.getDefault().getPluginPackageName().equals(pluginPackageName)
-                    && DataOperationManager.getDefault().getPluginPath().equals(pluginPath)
-                    && DataOperationManager.getDefault().getResourceSuffix().equals(suffix));
+                    && DataManager.getDefault().getPluginPackageName().equals(pluginPackageName)
+                    && DataManager.getDefault().getPluginPath().equals(pluginPath)
+                    && DataManager.getDefault().getResourceSuffix().equals(suffix));
         }
 
         return true;
@@ -78,7 +78,7 @@ public class ResourceManager implements ILoadSkin {
     public boolean loadSkin(String suffix) {
         boolean loadSuccess = smartCreateResource(GlobalManager.getDefault().getPackageName(), "", suffix);
         if (loadSuccess) {
-            DataOperationManager.getDefault().loadSkin(suffix);
+            DataManager.getDefault().loadSkin(suffix);
         }
 
         return loadSuccess;
@@ -88,7 +88,7 @@ public class ResourceManager implements ILoadSkin {
     public boolean loadSkin(String pluginPackageName, String pluginPath, String suffix) {
         boolean loadSuccess = smartCreateResource(pluginPackageName, pluginPath, suffix);
         if (loadSuccess) {
-            DataOperationManager.getDefault().loadSkin(pluginPackageName, pluginPath, suffix);
+            DataManager.getDefault().loadSkin(pluginPackageName, pluginPath, suffix);
         }
 
         return loadSuccess;

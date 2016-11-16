@@ -1,10 +1,10 @@
-package com.rrtoyewx.andskinlibrary.listener;
+package com.rrtoyewx.andskinlibrary.interfaces;
 
 /**
  * Created by Rrtoyewx on 2016/10/24.
  */
 
-public interface IDataOperation {
+public interface IDataManipulation {
     void saveStringMessage(String key, String message);
 
     String getStringMessage(String key, String defaultValue);
@@ -29,7 +29,7 @@ public interface IDataOperation {
 
     double getDoubleMessage(String key, double defaultValue);
 
-    class SimpleDateOperation implements IDataOperation {
+    class SimpleDateOperation implements IDataManipulation {
 
         @Override
         public void saveStringMessage(String key, String message) {

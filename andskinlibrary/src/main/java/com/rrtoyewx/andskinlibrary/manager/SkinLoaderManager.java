@@ -2,8 +2,8 @@ package com.rrtoyewx.andskinlibrary.manager;
 
 import android.content.Context;
 
-import com.rrtoyewx.andskinlibrary.listener.IChangeSkin;
-import com.rrtoyewx.andskinlibrary.listener.ILoadSkin;
+import com.rrtoyewx.andskinlibrary.interfaces.IChangeSkin;
+import com.rrtoyewx.andskinlibrary.interfaces.ILoadSkin;
 import com.rrtoyewx.andskinlibrary.listener.OnChangeSkinListener;
 import com.rrtoyewx.andskinlibrary.util.SkinL;
 
@@ -31,7 +31,7 @@ public class SkinLoaderManager implements ILoadSkin {
     }
 
     public void init(Context context) {
-        DataOperationManager.getDefault().init(context);
+        DataManager.getDefault().init(context);
         GlobalManager.getDefault().init(context);
         ResourceManager.getDefault().init();
     }

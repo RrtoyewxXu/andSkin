@@ -2,8 +2,8 @@ package com.rrtoyewx.andskinlibrary.factory;
 
 import android.content.Context;
 
-import com.rrtoyewx.andskinlibrary.helper.SharedPreferencesDataOperation;
-import com.rrtoyewx.andskinlibrary.listener.IDataOperation;
+import com.rrtoyewx.andskinlibrary.helper.SharedPreferencesHelper;
+import com.rrtoyewx.andskinlibrary.interfaces.IDataManipulation;
 import com.rrtoyewx.andskinlibrary.util.SkinL;
 
 /**
@@ -18,15 +18,15 @@ public abstract class DataOperationFactory {
         return new DataOperationFactoryImp();
     }
 
-    public abstract IDataOperation createDataOperation(Context context);
+    public abstract IDataManipulation createDataOperation(Context context);
 
 
     static class DataOperationFactoryImp extends DataOperationFactory {
 
         @Override
-        public IDataOperation createDataOperation(Context context) {
+        public IDataManipulation createDataOperation(Context context) {
             SkinL.d("生成 shared preferences data operation");
-            return new SharedPreferencesDataOperation(context);
+            return new SharedPreferencesHelper(context);
         }
     }
 

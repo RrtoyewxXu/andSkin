@@ -2,7 +2,7 @@ package com.rrtoyewx.andskinlibrary.factory;
 
 import com.rrtoyewx.andskinlibrary.attr.BackgroundAttr;
 import com.rrtoyewx.andskinlibrary.attr.TextColorAttr;
-import com.rrtoyewx.andskinlibrary.base.BaseSkinAttr;
+import com.rrtoyewx.andskinlibrary.attr.BaseSkinAttr;
 
 /**
  * Created by Rrtoyewx on 2016/10/25.

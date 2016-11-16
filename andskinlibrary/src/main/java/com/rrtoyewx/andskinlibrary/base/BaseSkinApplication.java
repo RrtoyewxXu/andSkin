@@ -7,8 +7,7 @@ import com.rrtoyewx.andskinlibrary.manager.SkinLoaderManager;
 /**
  * Created by Rrtoyewx on 2016/10/24.
  * BaseSkinApplication:base application init something
- * 1 dataOperation manager init
- * 2 global manager init
+ * SkinLoaderManager初始化
  */
 
 public class BaseSkinApplication extends Application {

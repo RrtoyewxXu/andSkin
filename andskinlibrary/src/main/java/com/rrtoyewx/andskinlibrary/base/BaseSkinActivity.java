@@ -4,13 +4,15 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.view.LayoutInflaterCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 
 import com.rrtoyewx.andskinlibrary.attr.SkinView;
 import com.rrtoyewx.andskinlibrary.factory.SkinInflaterFactory;
-import com.rrtoyewx.andskinlibrary.listener.IChangeSkin;
+import com.rrtoyewx.andskinlibrary.interfaces.IChangeSkin;
 import com.rrtoyewx.andskinlibrary.manager.SkinLoaderManager;
 import com.rrtoyewx.andskinlibrary.util.SkinL;
 
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -19,24 +21,18 @@ import java.util.List;
 
 public class BaseSkinActivity extends AppCompatActivity implements IChangeSkin {
     private List<SkinView> mSkinList;
+    protected BaseSkinActivity mActivity;
 
     private SkinInflaterFactory mSkinInflaterFactory;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        mActivity = this;
+
         if (shouldRegister()) {
             mSkinInflaterFactory = new SkinInflaterFactory();
-            mSkinInflaterFactory.setAppCompatActivity(this);
             LayoutInflaterCompat.setFactory(getLayoutInflater(), mSkinInflaterFactory);
-
-            getWindow().getDecorView().post(new Runnable() {
-                @Override
-                public void run() {
-                    mSkinList = mSkinInflaterFactory.getSkinViewList();
-                    SkinL.d(BaseSkinActivity.this.getClass().getSimpleName() + " skinList : " + mSkinList.toString());
-                    SkinLoaderManager.getDefault().register(BaseSkinActivity.this);
-                }
-            });
+            getWindow().getDecorView().post(new FindViewRunnable());
         }
 
         super.onCreate(savedInstanceState);
@@ -52,8 +48,8 @@ public class BaseSkinActivity extends AppCompatActivity implements IChangeSkin {
             return;
         }
 
-        for (SkinView skinView : mSkinList) {
-            skinView.apply();
+        for (IChangeSkin skinView : mSkinList) {
+            skinView.onChangeSkin();
         }
     }
 
@@ -63,5 +59,32 @@ public class BaseSkinActivity extends AppCompatActivity implements IChangeSkin {
             SkinLoaderManager.getDefault().unRegister(this);
         }
         super.onDestroy();
+    }
+
+    class FindViewRunnable implements Runnable {
+        @Override
+        public void run() {
+            mSkinList = mSkinInflaterFactory.getSkinViewList();
+            if (mSkinList != null && !mSkinList.isEmpty()) {
+                View view = null;
+                Iterator<SkinView> iterator = mSkinList.iterator();
+                while (iterator.hasNext()) {
+                    SkinView skinView = iterator.next();
+
+                    int viewId = skinView.getViewId();
+                    view = findViewById(viewId);
+
+                    if (view != null) {
+                        skinView.setSkinView(view);
+                    } else {
+                        SkinL.d("未找到id value:" + viewId + ",请检查" + BaseSkinActivity.this.getClass().getSimpleName() + "xml文件");
+                        iterator.remove();
+                    }
+                }
+            }
+
+            SkinL.d(mActivity.getClass().getSimpleName() + " skinList : " + mSkinList.toString());
+            SkinLoaderManager.getDefault().register(mActivity);
+        }
     }
 }

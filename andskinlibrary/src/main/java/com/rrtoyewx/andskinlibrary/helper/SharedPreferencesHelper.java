@@ -3,19 +3,19 @@ package com.rrtoyewx.andskinlibrary.helper;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.rrtoyewx.andskinlibrary.listener.IDataOperation;
+import com.rrtoyewx.andskinlibrary.interfaces.IDataManipulation;
 
 import static com.rrtoyewx.andskinlibrary.constant.ConfigConstants.NAME_SHARE_PREFERENCES;
 
 /**
  * Created by Rrtoyewx on 2016/10/24.
+ * SharedPreferencesHelper： SharedPreferences简单存储的实现类。
  */
 
-public class SharedPreferencesDataOperation implements IDataOperation {
-    private static SharedPreferencesDataOperation sAndSkinSharedPreferencesHelper;
+public class SharedPreferencesHelper implements IDataManipulation {
     private static SharedPreferences sAndSkinSharedPreferences;
 
-    public SharedPreferencesDataOperation(Context context) {
+    public SharedPreferencesHelper(Context context) {
         sAndSkinSharedPreferences = context.getSharedPreferences(NAME_SHARE_PREFERENCES, Context.MODE_PRIVATE);
     }
 

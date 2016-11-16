@@ -2,7 +2,6 @@ package com.rrtoyewx.andskinlibrary.attr;
 
 import android.view.View;
 
-import com.rrtoyewx.andskinlibrary.base.BaseSkinAttr;
 import com.rrtoyewx.andskinlibrary.manager.ResourceManager;
 import com.rrtoyewx.andskinlibrary.util.SkinL;
 
@@ -17,7 +16,7 @@ public class BackgroundAttr extends BaseSkinAttr {
     }
 
     @Override
-    public void apply(View view) {
+    public void applySkin(View view) {
         if (TYPE_ATTR_DRAWABLE.equals(mAttrType)) {
             view.setBackgroundDrawable(ResourceManager.getDefault().getDataResource().getDrawableByName(mAttrValueRef));
             SkinL.d(view + " : " + mAttrName + " apply " + mAttrValueRef);

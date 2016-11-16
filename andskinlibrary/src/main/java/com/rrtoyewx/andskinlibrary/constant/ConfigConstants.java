@@ -9,7 +9,7 @@ import com.rrtoyewx.andskinlibrary.manager.GlobalManager;
 public class ConfigConstants {
     //-------------------------------
     public static final String NAMES_SPACE = "http://schemas.android.com/android/andSkin";
-    public static final String ATTR_SKIN_ENABLE = "skin";
+    public static final String ATTR_SKIN_ENABLE = "enable";
 
     //--------------------------shared preferences name---------------------
     public static final String NAME_SHARE_PREFERENCES = "and_skin";

@@ -1,13 +1,13 @@
-package com.rrtoyewx.andskinlibrary.base;
+package com.rrtoyewx.andskinlibrary.attr;
 
-import android.view.View;
+import com.rrtoyewx.andskinlibrary.interfaces.IApplySkin;
 
 /**
  * Created by Rrtoyewx on 2016/10/24.
  * BaseSkinAttr: 属性的封装类
  */
 
-public abstract class BaseSkinAttr {
+public abstract class BaseSkinAttr implements IApplySkin {
     protected static final String TYPE_ATTR_COLOR = "color";
     protected static final String TYPE_ATTR_DRAWABLE = "drawable";
 
@@ -29,6 +29,4 @@ public abstract class BaseSkinAttr {
                 ", mAttrValueRef='" + mAttrValueRef + '\'' +
                 '}';
     }
-
-    public abstract void apply(View view);
 }

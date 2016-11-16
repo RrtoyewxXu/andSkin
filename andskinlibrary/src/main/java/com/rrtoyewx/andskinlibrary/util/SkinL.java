@@ -16,9 +16,7 @@ public class SkinL {
     }
 
     public static void e(String errorMsg) {
-        if (sDebugFlag) {
-            Log.e(TAG, errorMsg);
-        }
+        Log.e(TAG, errorMsg);
     }
 
     public static void d(String debugMsg) {
