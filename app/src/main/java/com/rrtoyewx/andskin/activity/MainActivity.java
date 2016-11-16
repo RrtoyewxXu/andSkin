@@ -8,7 +8,7 @@ import android.widget.TextView;
 
 import com.rrtoyewx.andskin.R;
 import com.rrtoyewx.andskinlibrary.base.BaseSkinActivity;
-import com.rrtoyewx.andskinlibrary.manager.SkinLoaderManager;
+import com.rrtoyewx.andskinlibrary.manager.SkinLoader;
 import com.rrtoyewx.andskinlibrary.util.SkinL;
 
 import java.io.BufferedReader;
@@ -58,7 +58,7 @@ public class MainActivity extends BaseSkinActivity {
             @Override
             public void onClick(View v) {
                 SkinL.d("change skin local blue");
-                SkinLoaderManager.getDefault().loadSkin("blue");
+                SkinLoader.getDefault().loadSkin("blue");
             }
         });
 
@@ -66,7 +66,7 @@ public class MainActivity extends BaseSkinActivity {
             @Override
             public void onClick(View v) {
                 SkinL.d("change skin local red");
-                SkinLoaderManager.getDefault().loadSkin("red");
+                SkinLoader.getDefault().loadSkin("red");
             }
         });
 
@@ -74,7 +74,7 @@ public class MainActivity extends BaseSkinActivity {
             @Override
             public void onClick(View v) {
                 SkinL.d("change skin plugin yellow");
-                SkinLoaderManager.getDefault().loadSkin("com.rrtoyewx.plugin", "plugin-debug.apk", "yellow");
+                SkinLoader.getDefault().loadSkin("com.rrtoyewx.plugin", "plugin-debug.apk", "yellow");
             }
         });
 
@@ -82,7 +82,7 @@ public class MainActivity extends BaseSkinActivity {
             @Override
             public void onClick(View v) {
                 SkinL.d("change skin plugin green");
-                SkinLoaderManager.getDefault().loadSkin("com.rrtoyewx.plugin", "plugin-debug.apk", "green");
+                SkinLoader.getDefault().loadSkin("com.rrtoyewx.plugin", "plugin-debug.apk", "green");
             }
         });
 
@@ -90,7 +90,7 @@ public class MainActivity extends BaseSkinActivity {
             @Override
             public void onClick(View v) {
                 SkinL.d("restore skin");
-                SkinLoaderManager.getDefault().restoreSkin();
+                SkinLoader.getDefault().restoreSkin();
             }
         });
     }

@@ -9,7 +9,7 @@ import android.view.View;
 import com.rrtoyewx.andskinlibrary.attr.SkinView;
 import com.rrtoyewx.andskinlibrary.factory.SkinInflaterFactory;
 import com.rrtoyewx.andskinlibrary.interfaces.IChangeSkin;
-import com.rrtoyewx.andskinlibrary.manager.SkinLoaderManager;
+import com.rrtoyewx.andskinlibrary.manager.SkinLoader;
 import com.rrtoyewx.andskinlibrary.util.SkinL;
 
 import java.util.Iterator;
@@ -56,7 +56,7 @@ public class BaseSkinActivity extends AppCompatActivity implements IChangeSkin {
     @Override
     protected void onDestroy() {
         if (shouldRegister()) {
-            SkinLoaderManager.getDefault().unRegister(this);
+            SkinLoader.getDefault().unRegister(this);
         }
         super.onDestroy();
     }
@@ -84,7 +84,7 @@ public class BaseSkinActivity extends AppCompatActivity implements IChangeSkin {
             }
 
             SkinL.d(mActivity.getClass().getSimpleName() + " skinList : " + mSkinList.toString());
-            SkinLoaderManager.getDefault().register(mActivity);
+            SkinLoader.getDefault().register(mActivity);
         }
     }
 }

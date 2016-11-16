@@ -15,7 +15,7 @@ public class ConfigConstants {
     public static final String NAME_SHARE_PREFERENCES = "and_skin";
 
     //--------------------------- external plugin path----------------------
-    public static final String PATH_EXTERNAL_PLUGIN = GlobalManager.getDefault().getApplicationContext().getCacheDir().getAbsolutePath();
+    public static final String PATH_EXTERNAL_PLUGIN = GlobalManager.getDefault().getApplicationContext().getExternalCacheDir().getAbsolutePath();
 
 
 }

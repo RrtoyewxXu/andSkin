@@ -2,7 +2,7 @@ package com.rrtoyewx.andskinlibrary.base;
 
 import android.app.Application;
 
-import com.rrtoyewx.andskinlibrary.manager.SkinLoaderManager;
+import com.rrtoyewx.andskinlibrary.manager.SkinLoader;
 
 /**
  * Created by Rrtoyewx on 2016/10/24.
@@ -14,7 +14,7 @@ public class BaseSkinApplication extends Application {
 
     @Override
     public void onCreate() {
-        SkinLoaderManager.getDefault().init(this);
+        SkinLoader.getDefault().init(this);
         super.onCreate();
     }
 }

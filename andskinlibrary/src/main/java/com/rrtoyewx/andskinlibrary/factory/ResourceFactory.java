@@ -3,17 +3,16 @@ package com.rrtoyewx.andskinlibrary.factory;
 import android.content.Context;
 import android.text.TextUtils;
 
-import com.rrtoyewx.andskinlibrary.constant.ConfigConstants;
-import com.rrtoyewx.andskinlibrary.dataresource.PluginResource;
-import com.rrtoyewx.andskinlibrary.dataresource.Resource;
-import com.rrtoyewx.andskinlibrary.dataresource.LocalResources;
+import com.rrtoyewx.andskinlibrary.deliver.IDeliver;
+import com.rrtoyewx.andskinlibrary.resource.PluginResource;
+import com.rrtoyewx.andskinlibrary.resource.Resource;
+import com.rrtoyewx.andskinlibrary.resource.LocalResource;
 import com.rrtoyewx.andskinlibrary.manager.GlobalManager;
 import com.rrtoyewx.andskinlibrary.util.SkinL;
 
-import java.io.File;
-
 /**
  * Created by Rrtoyewx on 2016/10/25.
+ * 创建资源工厂类
  */
 
 public abstract class ResourceFactory {
@@ -24,7 +23,7 @@ public abstract class ResourceFactory {
         return new ResourceFactoryImp();
     }
 
-    public abstract Resource createDateResource(String pluginPackageName, String pluginPath, String suffix);
+    public abstract Resource createResource(String pluginPackageName, String pluginPath, String suffix) throws Exception;
 
 
     static class ResourceFactoryImp extends ResourceFactory {
@@ -33,16 +32,16 @@ public abstract class ResourceFactory {
         }
 
         @Override
-        public Resource createDateResource(String pluginPackageName, String pluginPath, String suffix) {
+        public Resource createResource(String pluginPackageName, String pluginPath, String suffix) throws Exception {
             String packageName = GlobalManager.getDefault().getPackageName();
             Context context = GlobalManager.getDefault().getApplicationContext();
 
-            if (!TextUtils.isEmpty(pluginPath) && !packageName.equals(pluginPath)) {
+            if (!TextUtils.isEmpty(pluginPackageName) && !pluginPackageName.equals(packageName)) {
                 SkinL.d("create new plugin resource");
                 return new PluginResource(context, pluginPackageName, pluginPath, suffix);
             }
             SkinL.d("create new local data resource");
-            return new LocalResources(context, pluginPackageName, pluginPath, suffix);
+            return new LocalResource(context, pluginPackageName, pluginPath, suffix);
         }
     }
 

@@ -1,4 +1,4 @@
-package com.rrtoyewx.andskinlibrary.dataresource;
+package com.rrtoyewx.andskinlibrary.resource;
 
 import android.content.Context;
 import android.content.res.ColorStateList;
@@ -10,11 +10,12 @@ import com.rrtoyewx.andskinlibrary.util.SkinL;
 
 /**
  * Created by Rrtoyewx on 2016/10/24.
+ * 本地资源的管理类
  */
 
-public class LocalResources extends Resource {
+public class LocalResource extends Resource {
 
-    public LocalResources(Context baseSkinActivity, String pluginPackageName, String pluginPath, String resourcesSuffix) {
+    public LocalResource(Context baseSkinActivity, String pluginPackageName, String pluginPath, String resourcesSuffix) {
         super(baseSkinActivity, pluginPackageName, pluginPath, resourcesSuffix);
         mResources = baseSkinActivity.getResources();
     }

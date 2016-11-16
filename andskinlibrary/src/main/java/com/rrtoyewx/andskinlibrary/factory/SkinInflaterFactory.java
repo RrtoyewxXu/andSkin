@@ -8,7 +8,7 @@ import android.view.View;
 import com.rrtoyewx.andskinlibrary.attr.SkinView;
 import com.rrtoyewx.andskinlibrary.attr.BaseSkinAttr;
 import com.rrtoyewx.andskinlibrary.constant.ConfigConstants;
-import com.rrtoyewx.andskinlibrary.manager.DataManager;
+import com.rrtoyewx.andskinlibrary.manager.GlobalManager;
 import com.rrtoyewx.andskinlibrary.util.SkinL;
 
 import java.util.ArrayList;
@@ -65,7 +65,7 @@ public class SkinInflaterFactory implements LayoutInflaterFactory {
                 String typeName = context.getResources().getResourceTypeName(attrId);
                 SkinL.d("entryName:" + entryName + "--- typeName:" + typeName);
 
-                String suffix = DataManager.getDefault().getResourceSuffix();
+                String suffix = GlobalManager.getDefault().getResourceSuffix();
                 BaseSkinAttr skinAttr = AttrFactory.getDefault().createSkinAttr(typeName, attrName, entryName, suffix);
                 if (skinAttr != null) {
                     viewAttrs.add(skinAttr);

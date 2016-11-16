@@ -2,6 +2,9 @@ package com.rrtoyewx.andskinlibrary.interfaces;
 
 /**
  * Created by Rrtoyewx on 2016/10/25.
+ * ILoadSkin:
+ * 1,加载本地的皮肤
+ * 2,加载外部APK的皮肤
  */
 
 public interface ILoadSkin {
@@ -10,7 +13,7 @@ public interface ILoadSkin {
      *
      * @param suffix :the suffix of resource of name
      */
-    boolean loadSkin(String suffix);
+    void loadSkin(String suffix);
 
     /**
      * load remote plugin
@@ -19,5 +22,5 @@ public interface ILoadSkin {
      * @param suffix            : the suffix of resource of name
      * @param pluginPath        : the path of plugin
      */
-    boolean loadSkin(String pluginPackageName, String pluginPath, String suffix);
+    void loadSkin(String pluginPackageName, String pluginPath, String suffix);
 }

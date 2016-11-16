@@ -1,14 +1,10 @@
-package com.rrtoyewx.andskinlibrary.dataresource;
+package com.rrtoyewx.andskinlibrary.resource;
 
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
-import android.support.annotation.ColorRes;
-import android.support.annotation.DrawableRes;
 import android.text.TextUtils;
-
-import com.rrtoyewx.andskinlibrary.base.BaseSkinActivity;
 
 /**
  * Created by Rrtoyewx on 2016/10/24.
@@ -47,8 +43,8 @@ public abstract class Resource {
         return mResourcesSuffix;
     }
 
-    public void setResourcesSuffix(String mResourcesSuffix) {
-        this.mResourcesSuffix = mResourcesSuffix;
+    public void changeResourceSuffix(String resourcesSuffix) {
+        this.mResourcesSuffix = resourcesSuffix;
     }
 
     public String getPluginPath() {

@@ -1,4 +1,4 @@
-package com.rrtoyewx.andskinlibrary.dataresource;
+package com.rrtoyewx.andskinlibrary.resource;
 
 import android.content.Context;
 import android.content.res.AssetManager;
@@ -7,6 +7,7 @@ import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 
+import com.rrtoyewx.andskinlibrary.deliver.IDeliver;
 import com.rrtoyewx.andskinlibrary.manager.GlobalManager;
 import com.rrtoyewx.andskinlibrary.util.SkinL;
 
@@ -18,18 +19,19 @@ import static com.rrtoyewx.andskinlibrary.constant.ConfigConstants.PATH_EXTERNAL
 
 /**
  * Created by Rrtoyewx on 2016/10/26.
+ * 插件APK的资源管理类
  */
 
 public class PluginResource extends Resource {
     private Resources mLocalResources;
 
-    public PluginResource(Context baseSkinActivity, String pluginPackageName, String pluginPath, String resourcesSuffix) {
+    public PluginResource(Context baseSkinActivity, String pluginPackageName, String pluginPath, String resourcesSuffix) throws Exception {
         super(baseSkinActivity, pluginPackageName, pluginPath, resourcesSuffix);
         mLocalResources = baseSkinActivity.getResources();
         loadPlugin();
     }
 
-    private void loadPlugin() {
+    private void loadPlugin() throws Exception {
         File file = new File(PATH_EXTERNAL_PLUGIN + "/" + mPluginPath);
         SkinL.d(file.getAbsolutePath());
         if (mPluginPath == null || !file.exists()) {
@@ -37,24 +39,14 @@ public class PluginResource extends Resource {
         }
 
         AssetManager assetManager = null;
-        try {
-            assetManager = AssetManager.class.newInstance();
-            Method addAssetPath = assetManager.getClass().getMethod("addAssetPath", String.class);
-            addAssetPath.invoke(assetManager, file.getAbsolutePath());
 
-            Resources superRes = mContext.getResources();
-            mResources = new Resources(assetManager, superRes.getDisplayMetrics(), superRes.getConfiguration());
-            SkinL.d("load plugin success");
+        assetManager = AssetManager.class.newInstance();
+        Method addAssetPath = assetManager.getClass().getMethod("addAssetPath", String.class);
+        addAssetPath.invoke(assetManager, file.getAbsolutePath());
 
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        }
+        Resources superRes = mContext.getResources();
+        mResources = new Resources(assetManager, superRes.getDisplayMetrics(), superRes.getConfiguration());
+        SkinL.d("加载外部插件的皮肤成功");
     }
 
     @Override

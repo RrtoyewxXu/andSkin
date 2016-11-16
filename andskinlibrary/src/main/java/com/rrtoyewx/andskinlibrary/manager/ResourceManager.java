@@ -1,18 +1,27 @@
 package com.rrtoyewx.andskinlibrary.manager;
 
-import com.rrtoyewx.andskinlibrary.dataresource.PluginResource;
-import com.rrtoyewx.andskinlibrary.dataresource.Resource;
-import com.rrtoyewx.andskinlibrary.dataresource.LocalResources;
+import android.content.pm.PackageManager;
+import android.text.TextUtils;
+
+import com.rrtoyewx.andskinlibrary.deliver.IDeliver;
+import com.rrtoyewx.andskinlibrary.resource.PluginResource;
+import com.rrtoyewx.andskinlibrary.resource.Resource;
+import com.rrtoyewx.andskinlibrary.resource.LocalResource;
 import com.rrtoyewx.andskinlibrary.factory.ResourceFactory;
 import com.rrtoyewx.andskinlibrary.interfaces.ILoadSkin;
 import com.rrtoyewx.andskinlibrary.util.SkinL;
 
 /**
  * Created by Rrtoyewx on 2016/10/25.
+ * ResourceManager:
+ * 根据pluginAPKPath,pluginAPKPackageName,pluginAPKSuffix来判断是否生成新的Resource
+ *
+ * @see com.rrtoyewx.andskinlibrary.resource.Resource
  */
 
 public class ResourceManager implements ILoadSkin {
-    private Resource mDataResource;
+    private Resource mResource;
+    private IDeliver mIDeliver;
 
     private ResourceManager() {
     }
@@ -25,72 +34,70 @@ public class ResourceManager implements ILoadSkin {
         static ResourceManager sResourceManage = new ResourceManager();
     }
 
-    public void init() {
-        String pluginPackageName = DataManager.getDefault().getPluginPackageName();
-        String suffix = DataManager.getDefault().getResourceSuffix();
-        String pluginPath = DataManager.getDefault().getPluginPath();
+    void init(String pluginPackageName, String pluginPath, String pluginSuffix, IDeliver deliver) {
         SkinL.d("------------resource manager init begin----");
-        SkinL.d("resource manager init pluginPackageName: " + pluginPackageName + " suffix: " + suffix + "" + " pluginPath " + pluginPath);
+        SkinL.d("pluginPackageName: " + pluginPackageName);
+        SkinL.d("suffix: " + pluginSuffix);
+        SkinL.d("pluginPath " + pluginPath);
+        mIDeliver = deliver;
+        smartCreateResource(pluginPackageName, pluginPath, pluginSuffix);
         SkinL.d("------------resource manager init finish----");
-        smartCreateResource(pluginPackageName, pluginPath, suffix);
     }
 
     private boolean smartCreateResource(String pluginPackageName, String pluginPath, String suffix) {
         boolean shouldCreate = checkIfReCreateDateResource(pluginPackageName, pluginPath, suffix);
         SkinL.d("should create resource : " + shouldCreate);
         if (shouldCreate) {
-            createDataResource(pluginPackageName, pluginPath, suffix);
+            try {
+                createDataResource(pluginPackageName, pluginPath, suffix);
+                mIDeliver.postResourceManagerLoadSuccess(pluginPackageName, pluginPath, suffix);
+            } catch (Exception e) {
+                e.printStackTrace();
+                mIDeliver.postResourceManagerLoadError();
+            }
         } else {
-            mDataResource.setResourcesSuffix(suffix);
+            mResource.changeResourceSuffix(suffix);
+            mIDeliver.postResourceManagerLoadSuccess(pluginPackageName, pluginPath, suffix);
         }
 
-        return mDataResource != null;
+        return mResource != null;
     }
 
-    private void createDataResource(String pluginPackageName,String pluginPath, String suffix) {
+    private void createDataResource(String pluginPackageName, String pluginPath, String suffix) throws Exception {
         SkinL.d("create date resource");
-        mDataResource = ResourceFactory.newInstance().createDateResource(pluginPackageName,pluginPath, suffix);
+        mResource = ResourceFactory.newInstance().createResource(pluginPackageName, pluginPath, suffix);
     }
 
     private boolean checkIfReCreateDateResource(String pluginPackageName, String pluginPath, String suffix) {
-        if (mDataResource == null) {
+        if (mResource == null) {
             return true;
-        } else if (mDataResource instanceof LocalResources) {
-            // last resource is LocalResources and this resource is LocalResources do not need create
-            return !GlobalManager.getDefault().getPackageName().equals(pluginPackageName);
+        } else if (mResource instanceof LocalResource) {
+            return !TextUtils.isEmpty(pluginPackageName);
 
-        } else if (mDataResource instanceof PluginResource) {
-            // last resource is PluginResource and this resources same as last do not need create
-            return !(!GlobalManager.getDefault().getPackageName().equals(pluginPackageName)
-                    && DataManager.getDefault().getPluginPackageName().equals(pluginPackageName)
-                    && DataManager.getDefault().getPluginPath().equals(pluginPath)
-                    && DataManager.getDefault().getResourceSuffix().equals(suffix));
+        } else if (mResource instanceof PluginResource) {
+            return !(!TextUtils.isEmpty(pluginPackageName)
+                    && pluginPackageName.equals(GlobalManager.getDefault().getPluginAPKPackageName()));
         }
 
         return true;
     }
 
     public Resource getDataResource() {
-        return mDataResource;
-    }
-    
-    @Override
-    public boolean loadSkin(String suffix) {
-        boolean loadSuccess = smartCreateResource(GlobalManager.getDefault().getPackageName(), "", suffix);
-        if (loadSuccess) {
-            DataManager.getDefault().loadSkin(suffix);
-        }
-
-        return loadSuccess;
+        return mResource;
     }
 
     @Override
-    public boolean loadSkin(String pluginPackageName, String pluginPath, String suffix) {
-        boolean loadSuccess = smartCreateResource(pluginPackageName, pluginPath, suffix);
-        if (loadSuccess) {
-            DataManager.getDefault().loadSkin(pluginPackageName, pluginPath, suffix);
-        }
+    public void loadSkin(String suffix) {
+        loadSkin("", "", suffix);
+    }
 
-        return loadSuccess;
+    @Override
+    public void loadSkin(String pluginPackageName, String pluginPath, String suffix) {
+        try {
+            smartCreateResource(pluginPackageName, pluginPath, suffix);
+        } catch (Exception e) {
+            e.printStackTrace();
+            mIDeliver.postResourceManagerLoadError();
+        }
     }
 }
