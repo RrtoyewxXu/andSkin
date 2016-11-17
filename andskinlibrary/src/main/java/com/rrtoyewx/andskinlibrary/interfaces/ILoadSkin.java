@@ -19,8 +19,9 @@ public interface ILoadSkin {
      * load remote plugin
      *
      * @param pluginPackageName : the name of plugin
-     * @param suffix            : the suffix of resource of name
+     * @param suffix            : the suffix of resource name
      * @param pluginPath        : the path of plugin
      */
     void loadSkin(String pluginPackageName, String pluginPath, String suffix);
+
 }

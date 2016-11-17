@@ -45,6 +45,12 @@
         android:layout_height="wrap_content"
         android:text="回复默认皮肤" />
 
+    <Button
+        android:id="@+id/btn_main_error"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="点击出错：无访问资源" />
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"

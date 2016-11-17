@@ -1,6 +1,8 @@
 package com.rrtoyewx.andskinlibrary.attr;
 
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ListView;
 
 import com.rrtoyewx.andskinlibrary.interfaces.IChangeSkin;
 

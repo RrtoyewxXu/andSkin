@@ -1,14 +1,13 @@
 package com.rrtoyewx.andskinlibrary.manager;
 
-import android.content.pm.PackageManager;
 import android.text.TextUtils;
 
 import com.rrtoyewx.andskinlibrary.deliver.IDeliver;
-import com.rrtoyewx.andskinlibrary.resource.PluginResource;
-import com.rrtoyewx.andskinlibrary.resource.Resource;
-import com.rrtoyewx.andskinlibrary.resource.LocalResource;
 import com.rrtoyewx.andskinlibrary.factory.ResourceFactory;
 import com.rrtoyewx.andskinlibrary.interfaces.ILoadSkin;
+import com.rrtoyewx.andskinlibrary.resource.LocalResource;
+import com.rrtoyewx.andskinlibrary.resource.PluginResource;
+import com.rrtoyewx.andskinlibrary.resource.Resource;
 import com.rrtoyewx.andskinlibrary.util.SkinL;
 
 /**
@@ -40,24 +39,24 @@ public class ResourceManager implements ILoadSkin {
         SkinL.d("suffix: " + pluginSuffix);
         SkinL.d("pluginPath " + pluginPath);
         mIDeliver = deliver;
-        smartCreateResource(pluginPackageName, pluginPath, pluginSuffix);
+        smartCreateResource(pluginPackageName, pluginPath, pluginSuffix, true);
         SkinL.d("------------resource manager init finish----");
     }
 
-    private boolean smartCreateResource(String pluginPackageName, String pluginPath, String suffix) {
+    private boolean smartCreateResource(String pluginPackageName, String pluginPath, String suffix, boolean firstInit) {
         boolean shouldCreate = checkIfReCreateDateResource(pluginPackageName, pluginPath, suffix);
         SkinL.d("should create resource : " + shouldCreate);
         if (shouldCreate) {
             try {
                 createDataResource(pluginPackageName, pluginPath, suffix);
-                mIDeliver.postResourceManagerLoadSuccess(pluginPackageName, pluginPath, suffix);
+                mIDeliver.postResourceManagerLoadSuccess(firstInit, pluginPackageName, pluginPath, suffix);
             } catch (Exception e) {
                 e.printStackTrace();
-                mIDeliver.postResourceManagerLoadError();
+                mIDeliver.postResourceManagerLoadError(firstInit);
             }
         } else {
             mResource.changeResourceSuffix(suffix);
-            mIDeliver.postResourceManagerLoadSuccess(pluginPackageName, pluginPath, suffix);
+            mIDeliver.postResourceManagerLoadSuccess(false, pluginPackageName, pluginPath, suffix);
         }
 
         return mResource != null;
@@ -75,8 +74,12 @@ public class ResourceManager implements ILoadSkin {
             return !TextUtils.isEmpty(pluginPackageName);
 
         } else if (mResource instanceof PluginResource) {
-            return !(!TextUtils.isEmpty(pluginPackageName)
-                    && pluginPackageName.equals(GlobalManager.getDefault().getPluginAPKPackageName()));
+            return !(
+                    !TextUtils.isEmpty(pluginPackageName)
+                            && pluginPackageName.equals(GlobalManager.getDefault().getPluginAPKPackageName())
+                            && !TextUtils.isEmpty(pluginPath)
+                            && pluginPath.equals(GlobalManager.getDefault().getPluginAPKPath())
+            );
         }
 
         return true;
@@ -94,10 +97,10 @@ public class ResourceManager implements ILoadSkin {
     @Override
     public void loadSkin(String pluginPackageName, String pluginPath, String suffix) {
         try {
-            smartCreateResource(pluginPackageName, pluginPath, suffix);
+            smartCreateResource(pluginPackageName, pluginPath, suffix, false);
         } catch (Exception e) {
             e.printStackTrace();
-            mIDeliver.postResourceManagerLoadError();
+            mIDeliver.postResourceManagerLoadError(false);
         }
     }
 }

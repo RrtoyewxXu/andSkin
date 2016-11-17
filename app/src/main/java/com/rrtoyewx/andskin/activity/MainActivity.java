@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import com.rrtoyewx.andskin.R;
 import com.rrtoyewx.andskinlibrary.base.BaseSkinActivity;
+import com.rrtoyewx.andskinlibrary.listener.OnChangeSkinListener;
 import com.rrtoyewx.andskinlibrary.manager.SkinLoader;
 import com.rrtoyewx.andskinlibrary.util.SkinL;
 
@@ -25,6 +26,8 @@ public class MainActivity extends BaseSkinActivity {
     Button mChangeGreenSkinPluginBtn;
 
     Button mRestoreSkinBtn;
+
+    Button mErrorBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +49,7 @@ public class MainActivity extends BaseSkinActivity {
         mChangeGreenSkinPluginBtn = (Button) findViewById(R.id.btn_main_change_plugin_green);
 
         mRestoreSkinBtn = (Button) findViewById(R.id.btn_main_restore_skin);
+        mErrorBtn = (Button) findViewById(R.id.btn_main_error);
     }
 
     private void initData() {
@@ -90,7 +94,32 @@ public class MainActivity extends BaseSkinActivity {
             @Override
             public void onClick(View v) {
                 SkinL.d("restore skin");
-                SkinLoader.getDefault().restoreSkin();
+                SkinLoader.getDefault().restoreDefaultSkin();
+            }
+        });
+
+        mErrorBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SkinL.d("click error");
+                SkinLoader.getDefault().loadSkin("com.rrtoyewx.plugin", "plugin.apk", "green");
+            }
+        });
+
+        SkinLoader.getDefault().addOnChangeSkinListener(new OnChangeSkinListener(this) {
+            @Override
+            public void onChangeSkinBegin() {
+                SkinL.d("onChangeSkinBegin");
+            }
+
+            @Override
+            public void onChangeSkinError() {
+                SkinL.d("onChangeSkinError");
+            }
+
+            @Override
+            public void onChangeSkinSuccess() {
+                SkinL.d("onChangeSkinSuccess");
             }
         });
     }
