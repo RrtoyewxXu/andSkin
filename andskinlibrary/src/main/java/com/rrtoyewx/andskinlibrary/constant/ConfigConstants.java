@@ -17,5 +17,7 @@ public class ConfigConstants {
     //--------------------------- external plugin path----------------------
     public static final String PATH_EXTERNAL_PLUGIN = GlobalManager.getDefault().getApplicationContext().getExternalCacheDir().getAbsolutePath();
 
+    //-------------------------------status bar color name-------------------------
+    public static final String NAME_STATUS_BAR_COLOR = "status_bar_color";
 
 }

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.rrtoyewx.andskin.R;
 import com.rrtoyewx.andskinlibrary.base.BaseSkinActivity;
@@ -52,6 +53,11 @@ public class MainActivity extends BaseSkinActivity {
         mErrorBtn = (Button) findViewById(R.id.btn_main_error);
     }
 
+    @Override
+    protected String overrideStatusBarColorResName() {
+        return "status_color";
+    }
+
     private void initData() {
         String content = geFileFromAssets(this, "Article.txt");
         mContentTv.setText(content);
@@ -95,6 +101,7 @@ public class MainActivity extends BaseSkinActivity {
             public void onClick(View v) {
                 SkinL.d("restore skin");
                 SkinLoader.getDefault().restoreDefaultSkin();
+                Toast.makeText(mActivity, "你好啊啊。。。。。", Toast.LENGTH_SHORT).show();
             }
         });
 

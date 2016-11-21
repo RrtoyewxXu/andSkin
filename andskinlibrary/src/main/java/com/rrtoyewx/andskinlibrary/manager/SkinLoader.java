@@ -106,7 +106,7 @@ public class SkinLoader implements ILoadSkin {
     }
 
     public void restoreDefaultSkin() {
-        restoreLastSkinInner(true);
+        restoreDefaultSkinInner(true);
     }
 
     private void restoreDefaultSkinInner(boolean needCallSkinChangeListener) {

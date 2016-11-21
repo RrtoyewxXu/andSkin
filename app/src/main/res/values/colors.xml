@@ -7,12 +7,19 @@
 
     <color name="bg_main">#FFFFFF</color>
     <color name="text_color_main">#000000</color>
+    <color name="status_bar_color">#000000</color>
+    <color name="status_color">#000000</color>
 
     <!--blue-->
     <color name="bg_main_blue">#444444</color>
     <color name="text_color_main_blue">#1111AA</color>
+    <color name="status_bar_color_blue">#1111AA</color>
+    <color name="status_color_blue">#0000FF</color>
+
 
     <!--red-->
     <color name="bg_main_red">#AAAAAA</color>
     <color name="text_color_main_red">#AA2222</color>
+    <color name="status_bar_color_red">#AA2222</color>
+    <color name="status_color_red">#FF0000</color>
 </resources>
