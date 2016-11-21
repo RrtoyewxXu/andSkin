@@ -7,8 +7,12 @@
     <!--yellow-->
     <color name="bg_main_yellow">#222222</color>
     <color name="text_color_main_yellow">#ffff00</color>
+    <color name="status_bar_color_yellow">#777700</color>
+    <color name="status_color_yellow">#ffff00</color>
 
     <!--green-->
     <color name="bg_main_green">#666666</color>
     <color name="text_color_main_green">#00aa00</color>
+    <color name="status_bar_color_green">#007700</color>
+    <color name="status_color_green">#00ff00</color>
 </resources>

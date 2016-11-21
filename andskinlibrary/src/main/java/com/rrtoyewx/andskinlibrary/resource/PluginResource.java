@@ -7,12 +7,10 @@ import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 
-import com.rrtoyewx.andskinlibrary.deliver.IDeliver;
 import com.rrtoyewx.andskinlibrary.manager.GlobalManager;
 import com.rrtoyewx.andskinlibrary.util.SkinL;
 
 import java.io.File;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import static com.rrtoyewx.andskinlibrary.constant.ConfigConstants.PATH_EXTERNAL_PLUGIN;
@@ -94,6 +92,19 @@ public class PluginResource extends Resource {
 
     @Override
     public ColorStateList getColorStateListByName(String colorStateListResName) {
-        return null;
+        int originColorId = mLocalResources.getIdentifier(colorStateListResName, "color", GlobalManager.getDefault().getPackageName());
+        ColorStateList originColor = mLocalResources.getColorStateList(originColorId);
+        SkinL.d("getColorStateListByName originColorStateListResName : " + colorStateListResName);
+        ColorStateList trueColorState = originColor;
+        if (!TextUtils.isEmpty(mResourcesSuffix)) {
+            String trueColorStateName = appendSuffix(colorStateListResName);
+            try {
+                int trueColorId = mResources.getIdentifier(trueColorStateName, "color", mPluginPackageName);
+                trueColorState = mResources.getColorStateList(trueColorId);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return trueColorState;
     }
 }

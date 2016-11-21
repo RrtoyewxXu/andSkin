@@ -55,9 +55,9 @@
         android:id="@+id/btn_main_test_color_selector"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:text="测试color selector"
         android:textColor="@color/bg_btn_selector"
-        skin:enable="true"
-        android:text="测试color selector" />
+        skin:enable="true" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -74,7 +74,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:background="@drawable/img_main"
+                android:background="@drawable/bg_image_selector"
+                android:clickable="true"
                 skin:enable="true" />
 
             <TextView

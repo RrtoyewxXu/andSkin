@@ -28,7 +28,7 @@ public abstract class Resource {
     public abstract int getColorByName(String colorResName);
 
     public abstract Drawable getDrawableByName(String drawableResName);
-
+    
     public abstract ColorStateList getColorStateListByName(String colorStateListResName);
 
     final String appendSuffix(String name) {
