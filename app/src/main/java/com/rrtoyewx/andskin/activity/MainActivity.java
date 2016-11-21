@@ -27,8 +27,10 @@ public class MainActivity extends BaseSkinActivity {
     Button mChangeGreenSkinPluginBtn;
 
     Button mRestoreSkinBtn;
-
     Button mErrorBtn;
+
+    Button mTestColorSelectorBtn;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +53,8 @@ public class MainActivity extends BaseSkinActivity {
 
         mRestoreSkinBtn = (Button) findViewById(R.id.btn_main_restore_skin);
         mErrorBtn = (Button) findViewById(R.id.btn_main_error);
+
+        mTestColorSelectorBtn = (Button) findViewById(R.id.btn_main_test_color_selector);
     }
 
     @Override
@@ -127,6 +131,13 @@ public class MainActivity extends BaseSkinActivity {
             @Override
             public void onChangeSkinSuccess() {
                 SkinL.d("onChangeSkinSuccess");
+            }
+        });
+
+        mTestColorSelectorBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int color = getResources().getColor(R.color.bg_btn_selector);
             }
         });
     }

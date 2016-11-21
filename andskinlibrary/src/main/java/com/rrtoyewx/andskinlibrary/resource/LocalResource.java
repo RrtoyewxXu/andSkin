@@ -65,8 +65,19 @@ public class LocalResource extends Resource {
 
     @Override
     public ColorStateList getColorStateListByName(String colorStateListResName) {
-
-
-        return null;
+        int originColorId = mResources.getIdentifier(colorStateListResName, "color", GlobalManager.getDefault().getPackageName());
+        ColorStateList originColor = mResources.getColorStateList(originColorId);
+        SkinL.d("getColorStateListByName originColorStateListResName : " + colorStateListResName);
+        ColorStateList trueColorState = originColor;
+        if (!TextUtils.isEmpty(mResourcesSuffix)) {
+            String trueColorStateName = appendSuffix(colorStateListResName);
+            try {
+                int trueColorId = mResources.getIdentifier(trueColorStateName, "color", GlobalManager.getDefault().getPackageName());
+                trueColorState = mResources.getColorStateList(trueColorId);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return trueColorState;
     }
 }

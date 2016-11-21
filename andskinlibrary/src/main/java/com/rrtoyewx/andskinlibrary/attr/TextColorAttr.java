@@ -20,7 +20,7 @@ public class TextColorAttr extends BaseSkinAttr {
     @Override
     public void applySkin(View view) {
         if (view instanceof TextView && TYPE_ATTR_COLOR.equals(mAttrType)) {
-            ((TextView) view).setTextColor(ResourceManager.getDefault().getDataResource().getColorByName(mAttrValueRef));
+            ((TextView) view).setTextColor(ResourceManager.getDefault().getDataResource().getColorStateListByName(mAttrValueRef));
             SkinL.d(view + " : " + mAttrName + " apply " + mAttrValueRef);
         }
     }

@@ -51,6 +51,14 @@
         android:layout_height="wrap_content"
         android:text="点击出错：无访问资源" />
 
+    <Button
+        android:id="@+id/btn_main_test_color_selector"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/bg_btn_selector"
+        skin:enable="true"
+        android:text="测试color selector" />
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"

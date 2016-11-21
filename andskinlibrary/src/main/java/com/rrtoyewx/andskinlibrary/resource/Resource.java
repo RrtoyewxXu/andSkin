@@ -31,7 +31,7 @@ public abstract class Resource {
 
     public abstract ColorStateList getColorStateListByName(String colorStateListResName);
 
-    public final String appendSuffix(String name) {
+    final String appendSuffix(String name) {
         if (!TextUtils.isEmpty(mResourcesSuffix)) {
             return name + "_" + mResourcesSuffix;
         }
