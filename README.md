@@ -133,79 +133,83 @@ skin:enable="true"
  
 ## 一些细节的说明
 ### 对于应用打开初始化的过程
-```flow
-st=>start: 初始化
-e=>end: loadSkinEnd
+![](images/init.jpeg)
+<!--```flow-->
+<!--st=>start: 初始化-->
+<!--e=>end: loadSkinEnd-->
 
-DataManagerInit=>operation: DataManager初始化
-GlobalManagerInit=>operation: GlobalManager初始化
-ResourceManageInit=>operation: ResourceManage初始化
+<!--DataManagerInit=>operation: DataManager初始化-->
+<!--GlobalManagerInit=>operation: GlobalManager初始化-->
+<!--ResourceManageInit=>operation: ResourceManage初始化-->
 
-generateResource=>operation: 生成Resource对象
-generateResourceCondition=>condition: Resource对象生成成功？
+<!--generateResource=>operation: 生成Resource对象-->
+<!--generateResourceCondition=>condition: Resource对象生成成功？-->
 
-onInitSuccess=>operation: 回调初始化成功的监听
-onInitError=>operation: 回调初始化失败的监听
-restoreDefaultSkin=>operation: 还原默认的皮肤
+<!--onInitSuccess=>operation: 回调初始化成功的监听-->
+<!--onInitError=>operation: 回调初始化失败的监听-->
+<!--restoreDefaultSkin=>operation: 还原默认的皮肤-->
 
-st->DataManagerInit->GlobalManagerInit->ResourceManageInit->generateResource->generateResourceCondition(yes)->onInitSuccess->e
+<!--st->DataManagerInit->GlobalManagerInit->ResourceManageInit->generateResource->generateResourceCondition(yes)->onInitSuccess->e-->
 
-generateResourceCondition(no)->onInitError->restoreDefaultSkin
-```
+<!--generateResourceCondition(no)->onInitError->restoreDefaultSkin-->
+<!--```-->
 ### 对于页面注册流程图
-```flow
-st=>start: 注册当前页面
-e=>end: 结束
+![](images/register.jpeg)
+<!--```flow-->
+<!--st=>start: 注册当前页面-->
+<!--e=>end: 结束-->
 
-notifyAllChangeSkinObserverList=>operation: 通知当前注册页面更换资源
-findAllResource=>operation: 查找所有的资源
-findAllResourceCondition=>condition: 查找所有的资源成功？
+<!--notifyAllChangeSkinObserverList=>operation: 通知当前注册页面更换资源-->
+<!--findAllResource=>operation: 查找所有的资源-->
+<!--findAllResourceCondition=>condition: 查找所有的资源成功？-->
 
-allChangeSkinObserverList=>operation: 所有控件进行更换操作
+<!--allChangeSkinObserverList=>operation: 所有控件进行更换操作-->
 
-restoreDefaultSkin=>operation: 还原默认的皮肤
+<!--restoreDefaultSkin=>operation: 还原默认的皮肤-->
 
-st->notifyAllChangeSkinObserverList->findAllResource->findAllResourceCondition->findAllResourceCondition(yes)->allChangeSkinObserverList->e
-findAllResourceCondition(no)->restoreDefaultSkin->
-```
+<!--st->notifyAllChangeSkinObserverList->findAllResource->findAllResourceCondition->findAllResourceCondition(yes)->allChangeSkinObserverList->e-->
+<!--findAllResourceCondition(no)->restoreDefaultSkin->-->
+<!--```-->
 ### 对于应用启动后，点击换肤的流程图
-```flow
-st=>start: loadSkin
-e=>end: loadSkinEnd
+![](images/loadSkin.jpeg)
+<!--```flow-->
+<!--st=>start: loadSkin-->
+<!--e=>end: loadSkinEnd-->
 
-saveDataManager=>operation: DataManager存储需要换肤的相关信息
-saveDataManagerCondition=>condition:  DataManager存储信息成功？
+<!--saveDataManager=>operation: DataManager存储需要换肤的相关信息-->
+<!--saveDataManagerCondition=>condition:  DataManager存储信息成功？-->
 
-generateResource=>operation: 生成Resource对象
-generateResourceCondition=>condition: Resource对象生成成功？
+<!--generateResource=>operation: 生成Resource对象-->
+<!--generateResourceCondition=>condition: Resource对象生成成功？-->
 
-notifyAllChangeSkinObserverList=>operation: 通知所有注册页面更换资源
-findAllResource=>operation: 查找所有的资源
-findAllResourceCondition=>condition: 查找所有的资源成功？
+<!--notifyAllChangeSkinObserverList=>operation: 通知所有注册页面更换资源-->
+<!--findAllResource=>operation: 查找所有的资源-->
+<!--findAllResourceCondition=>condition: 查找所有的资源成功？-->
 
-allChangeSkinObserverList=>operation: 所有控件进行更换操作
+<!--allChangeSkinObserverList=>operation: 所有控件进行更换操作-->
 
-restoreDefaultSkin=>operation: 还原默认的皮肤
-restoreLastSkin=>operation: 还原上一套的皮肤
+<!--restoreDefaultSkin=>operation: 还原默认的皮肤-->
+<!--restoreLastSkin=>operation: 还原上一套的皮肤-->
 
-flushGlobalManagerInfos=>operation: 刷新GlobalManager关于资源的相关信息
+<!--flushGlobalManagerInfos=>operation: 刷新GlobalManager关于资源的相关信息-->
 
-onLoadSkinError=>operation: 回调加载皮肤失败的监听
+<!--onLoadSkinError=>operation: 回调加载皮肤失败的监听-->
 
-onLoadSkinSuccess=>operation: 回调加载皮肤成功的监听
+<!--onLoadSkinSuccess=>operation: 回调加载皮肤成功的监听-->
 
-st->saveDataManager->saveDataManagerCondition
-saveDataManagerCondition(yes)->generateResource->generateResourceCondition->generateResourceCondition(yes)->notifyAllChangeSkinObserverList->findAllResource->findAllResourceCondition->findAllResourceCondition(yes)->allChangeSkinObserverList->flushGlobalManagerInfos->onLoadSkinSuccess
+<!--st->saveDataManager->saveDataManagerCondition-->
+<!--saveDataManagerCondition(yes)->generateResource->generateResourceCondition->generateResourceCondition(yes)->notifyAllChangeSkinObserverList->findAllResource->findAllResourceCondition->findAllResourceCondition(yes)->allChangeSkinObserverList->flushGlobalManagerInfos->onLoadSkinSuccess-->
 
-saveDataManagerCondition(no)->onLoadSkinError->restoreLastSkin->saveDataManager
+<!--saveDataManagerCondition(no)->onLoadSkinError->restoreLastSkin->saveDataManager-->
 
-generateResourceCondition(no)->onLoadSkinError->restoreLastSkin->saveDataManager
+<!--generateResourceCondition(no)->onLoadSkinError->restoreLastSkin->saveDataManager-->
 
-findAllResourceCondition(no)->onLoadSkinError->restoreLastSkin->saveDataManager
-```
+<!--findAllResourceCondition(no)->onLoadSkinError->restoreLastSkin->saveDataManager-->
+<!--```-->
 > 说明</br>
-1. DataManager保存信息成功或者失败，成功是代表上一次资源相关信息和本次换肤的资源相关信息不一样，则需要保存，即为成功。反之则为失败</br>
-2. 生成Resource对象成功或者失败，成功是指加载外部插件成功生成相应的Resources对象。</br>
-3. 因为采用的是才查找资源再更换的操作，所有在当所有资源都查找成功，才会进行回调，如果存在任一一个资源查找不到，也会认为失败，对于这一点，想了很久业务上面，避免了页面过度重绘</br>
-4. 对于应用打开还原上次资源失败后采用的是还原默认皮肤，而对于应用正常启动，换肤操作失败还原上一次皮肤。</br>
+1. restoreLastSkin或者restoreDefaultSkin都是一次loadSkin的过程
+2. DataManager保存信息成功或者失败，成功是代表上一次资源相关信息和本次换肤的资源相关信息不一样，则需要保存，即为成功。反之则为失败</br>
+3. 生成Resource对象成功或者失败，成功是指加载外部插件成功生成相应的Resources对象。</br>
+4. 因为采用的是才查找资源再更换的操作，所有在当所有资源都查找成功，才会进行回调，如果存在任一一个资源查找不到，也会认为失败，对于这一点，想了很久业务上面，避免了页面过度重绘</br>
+5. 对于应用打开还原上次资源失败后采用的是还原默认皮肤，而对于应用正常启动，换肤操作失败还原上一次皮肤。</br>
  
