@@ -63,9 +63,15 @@ public class SkinView implements IChangeSkin {
     }
 
     @Override
-    public void onChangeSkin() {
+    public boolean onChangeSkin() {
+        boolean changed = true;
         for (BaseSkinAttr attr : mSkinAttrList) {
-            attr.applySkin(mView);
+            changed = attr.applySkin(mView);
+            if (!changed) {
+                break;
+            }
         }
+
+        return changed;
     }
 }

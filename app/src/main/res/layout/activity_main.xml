@@ -59,6 +59,12 @@
         android:textColor="@color/bg_btn_selector"
         skin:enable="true" />
 
+    <Button
+        android:id="@+id/btn_main_load_error_resource_plugin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="加载外部插件：但无资源" />
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"

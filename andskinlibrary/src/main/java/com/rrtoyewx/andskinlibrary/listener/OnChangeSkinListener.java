@@ -11,14 +11,14 @@ import java.lang.ref.WeakReference;
 
 public abstract class OnChangeSkinListener {
 
-    private WeakReference<BaseSkinActivity> mBaseSkinActivity;
+    private BaseSkinActivity mBaseSkinActivity;
 
     public OnChangeSkinListener(BaseSkinActivity baseSkinActivity) {
-        mBaseSkinActivity = new WeakReference<BaseSkinActivity>(baseSkinActivity);
+        mBaseSkinActivity = baseSkinActivity;
     }
 
     public BaseSkinActivity getBindActivity() {
-        return mBaseSkinActivity.get();
+        return mBaseSkinActivity;
     }
 
     public abstract void onChangeSkinBegin();

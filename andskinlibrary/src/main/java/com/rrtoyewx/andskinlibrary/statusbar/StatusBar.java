@@ -6,6 +6,7 @@ import com.rrtoyewx.andskinlibrary.base.BaseSkinActivity;
 import com.rrtoyewx.andskinlibrary.constant.ConfigConstants;
 import com.rrtoyewx.andskinlibrary.interfaces.IChangeSkin;
 import com.rrtoyewx.andskinlibrary.manager.ResourceManager;
+import com.rrtoyewx.andskinlibrary.util.SkinL;
 
 /**
  * Created by Rrtoyewx on 2016/11/17.

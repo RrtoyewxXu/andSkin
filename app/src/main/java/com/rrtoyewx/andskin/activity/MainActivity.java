@@ -30,6 +30,7 @@ public class MainActivity extends BaseSkinActivity {
     Button mErrorBtn;
 
     Button mTestColorSelectorBtn;
+    Button mLoadErrorResourceBtn;
 
 
     @Override
@@ -55,6 +56,7 @@ public class MainActivity extends BaseSkinActivity {
         mErrorBtn = (Button) findViewById(R.id.btn_main_error);
 
         mTestColorSelectorBtn = (Button) findViewById(R.id.btn_main_test_color_selector);
+        mLoadErrorResourceBtn = (Button) findViewById(R.id.btn_main_load_error_resource_plugin);
     }
 
     @Override
@@ -105,7 +107,6 @@ public class MainActivity extends BaseSkinActivity {
             public void onClick(View v) {
                 SkinL.d("restore skin");
                 SkinLoader.getDefault().restoreDefaultSkin();
-                Toast.makeText(mActivity, "你好啊啊。。。。。", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -138,6 +139,13 @@ public class MainActivity extends BaseSkinActivity {
             @Override
             public void onClick(View v) {
                 int color = getResources().getColor(R.color.bg_btn_selector);
+            }
+        });
+
+        mLoadErrorResourceBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SkinLoader.getDefault().loadSkin("com.rrtoyewx.plugin", "plugin-debug.apk", "red");
             }
         });
     }

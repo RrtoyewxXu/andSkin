@@ -64,7 +64,7 @@ public class ResourceManager implements ILoadSkin {
 
     private void createDataResource(String pluginPackageName, String pluginPath, String suffix) throws Exception {
         SkinL.d("create date resource");
-        mResource = ResourceFactory.newInstance().createResource(pluginPackageName, pluginPath, suffix);
+        mResource = ResourceFactory.newInstance().createResource(pluginPackageName, pluginPath, suffix, mIDeliver);
     }
 
     private boolean checkIfReCreateDateResource(String pluginPackageName, String pluginPath, String suffix) {

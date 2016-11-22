@@ -7,5 +7,5 @@ import android.view.View;
  */
 
 public interface IApplySkin {
-    void applySkin(View view);
+    boolean applySkin(View view);
 }

@@ -8,6 +8,8 @@ import android.view.WindowManager;
 import android.widget.FrameLayout;
 
 import com.rrtoyewx.andskinlibrary.base.BaseSkinActivity;
+import com.rrtoyewx.andskinlibrary.resource.Resource;
+import com.rrtoyewx.andskinlibrary.util.SkinL;
 
 /**
  * Created by Rrtoyewx on 2016/11/17.
@@ -35,10 +37,12 @@ public class StatusBarKitKat extends StatusBar {
     }
 
     @Override
-    public void onChangeSkin() {
-        if (mFakerView != null) {
-            mFakerView.setBackgroundColor(getColor());
+    public boolean onChangeSkin() {
+        int color = getColor();
+        if (mFakerView != null && color != Resource.VALUE_ERROR_COLOR) {
+            mFakerView.setBackgroundColor(color);
         }
+        return color != Resource.VALUE_ERROR_COLOR;
     }
 
     private int getStatusBarHeight() {

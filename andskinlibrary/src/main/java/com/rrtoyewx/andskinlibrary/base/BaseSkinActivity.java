@@ -50,24 +50,6 @@ public class BaseSkinActivity extends AppCompatActivity implements IChangeSkin {
         super.onCreate(savedInstanceState);
     }
 
-    @Override
-    public void setContentView(@LayoutRes int layoutResID) {
-        super.setContentView(layoutResID);
-        SkinL.d("setContentView");
-    }
-
-    @Override
-    public void setContentView(View view) {
-        super.setContentView(view);
-        SkinL.d("setContentView");
-    }
-
-    @Override
-    public void setContentView(View view, ViewGroup.LayoutParams params) {
-        super.setContentView(view, params);
-        SkinL.d("setContentView");
-    }
-
     protected boolean shouldRegister() {
         return true;
     }
@@ -88,18 +70,28 @@ public class BaseSkinActivity extends AppCompatActivity implements IChangeSkin {
     }
 
     @Override
-    public void onChangeSkin() {
+    public boolean onChangeSkin() {
+        boolean changed = true;
+
+        if (mStatusBar != null) {
+            changed = mStatusBar.onChangeSkin();
+        }
+
+        if (!changed) {
+            return false;
+        }
+
         if (mSkinList == null || mSkinList.isEmpty()) {
-            return;
+            return true;
         }
 
         for (IChangeSkin skinView : mSkinList) {
-            skinView.onChangeSkin();
+            changed = skinView.onChangeSkin();
+            if (!changed) {
+                break;
+            }
         }
-
-        if (mStatusBar != null) {
-            mStatusBar.onChangeSkin();
-        }
+        return changed;
     }
 
     @Override

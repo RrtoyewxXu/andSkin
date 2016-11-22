@@ -9,7 +9,7 @@ import com.rrtoyewx.andskinlibrary.deliver.IDeliver;
 import com.rrtoyewx.andskinlibrary.interfaces.IChangeSkin;
 import com.rrtoyewx.andskinlibrary.interfaces.ILoadSkin;
 import com.rrtoyewx.andskinlibrary.listener.OnChangeSkinListener;
-import com.rrtoyewx.andskinlibrary.listener.OnInitListener;
+import com.rrtoyewx.andskinlibrary.listener.OnInitLoadPluginListener;
 import com.rrtoyewx.andskinlibrary.util.SkinL;
 
 import java.util.ArrayList;
@@ -22,6 +22,14 @@ import java.util.List;
  * 1.初始化DataManager,GlobalManager,ResourceManager
  * 2.负责调度DataManager和ResourceManager在加载皮肤的时候的关系
  * 3.维护需要更改皮肤的IChangeSkin的对象
+ * <p>
+ * 流程
+ * - loadSkin命令
+ * - DataManager保存当前的Skin资源相关信息
+ * - 生成Resource对象
+ * - 通知所有的观察者
+ * - 刷新对外暴露的GlobalManager的相关信息
+ * 在这其中如果出现error，则通过IDeliver进行分发各个事件
  */
 
 public class SkinLoader implements ILoadSkin {
@@ -31,7 +39,9 @@ public class SkinLoader implements ILoadSkin {
     private LoadSkinTask mLoadSkinTask;
 
     private List<OnChangeSkinListener> mOnChangeSkinListenerList = new ArrayList<>();
-    private OnInitListener mOnInitListener;
+    private OnInitLoadPluginListener mOnInitLoadSkinResourceListener;
+
+    private boolean mJustRegisteredFlag = false;
 
     private SkinLoader() {
 
@@ -61,8 +71,8 @@ public class SkinLoader implements ILoadSkin {
         mOnChangeSkinListenerList.add(listener);
     }
 
-    public void setOnInitListener(OnInitListener listener) {
-        this.mOnInitListener = listener;
+    public void setOnInitListener(OnInitLoadPluginListener listener) {
+        this.mOnInitLoadSkinResourceListener = listener;
     }
 
     public void register(IChangeSkin changeSkinObserver) {
@@ -70,7 +80,15 @@ public class SkinLoader implements ILoadSkin {
             throw new IllegalArgumentException(changeSkinObserver.getClass().getSimpleName() + "also register!! please check");
         }
         mChangeSkinObserverList.add(changeSkinObserver);
-        changeSkinObserver.onChangeSkin();
+
+        mJustRegisteredFlag = true;
+        boolean changeSkinResult = notifyChangeSkinObserver(changeSkinObserver);
+        if (changeSkinResult) {
+            mLoadSkinDeliver.postGetAllResourceSuccessOnMainThread(DataManager.getDefault().getPluginPackageName(), DataManager.getDefault().getPluginPath(), DataManager.getDefault().getResourceSuffix());
+        } else {
+            mLoadSkinDeliver.postDataManagerLoadError();
+        }
+        mJustRegisteredFlag = false;
     }
 
     public void unRegister(IChangeSkin changeSkinObserver) {
@@ -118,11 +136,11 @@ public class SkinLoader implements ILoadSkin {
     }
 
     private void restoreLastSkinInner(boolean needCallSkinChangeListener) {
-        String pluginPackageName = DataManager.getDefault().getPluginPackageName();
-        String pluginPath = DataManager.getDefault().getPluginPath();
-        String resourceSuffix = DataManager.getDefault().getResourceSuffix();
+        String lastPluginPackageName = GlobalManager.getDefault().getPluginAPKPackageName();
+        String lastPluginPath = GlobalManager.getDefault().getPluginAPKPath();
+        String lastResourceSuffix = GlobalManager.getDefault().getResourceSuffix();
 
-        loadSkinInner(pluginPackageName, pluginPath, resourceSuffix, needCallSkinChangeListener);
+        loadSkinInner(lastPluginPackageName, lastPluginPath, lastResourceSuffix, needCallSkinChangeListener);
     }
 
     private void cancelLoadSkinTask() {
@@ -141,17 +159,34 @@ public class SkinLoader implements ILoadSkin {
         mLoadSkinTask.execute(pluginAPKPackageName, pluginAPKPath, resourceSuffix);
     }
 
+    private boolean notifyAllChangeSkinObserverList() {
+        boolean changedSkinSuccess = true;
+        SkinL.d("通知所有skin观察者进行换肤");
+        for (IChangeSkin changeSkin : mChangeSkinObserverList) {
+            changedSkinSuccess = changeSkin.onChangeSkin();
+            if (!changedSkinSuccess) {
+                break;
+            }
+        }
+        return changedSkinSuccess;
+    }
+
+    private boolean notifyChangeSkinObserver(IChangeSkin changeSkinObserver) {
+        boolean changeSkinResult = changeSkinObserver.onChangeSkin();
+        return changeSkinResult;
+    }
+
     private class LoadSkinTask extends AsyncTask<String, Void, Void> {
-        private boolean mNeedCallSkinChangeListener = false;
+        private boolean mNeedCallSkinChangeListenerFlag = false;
 
         void setNeedCallSkinChangeListener(boolean needCallSkinChangeListener) {
-            mNeedCallSkinChangeListener = needCallSkinChangeListener;
+            mNeedCallSkinChangeListenerFlag = needCallSkinChangeListener;
         }
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            if (mNeedCallSkinChangeListener) {
+            if (mNeedCallSkinChangeListenerFlag) {
                 for (OnChangeSkinListener onChangeSkinListener : mOnChangeSkinListenerList) {
                     onChangeSkinListener.onChangeSkinBegin();
                 }
@@ -164,13 +199,13 @@ public class SkinLoader implements ILoadSkin {
             String pluginAPKPath = params[1];
             String resourceSuffix = params[2];
 
-            ResourceManager.getDefault().loadSkin(pluginAPKPackageName, pluginAPKPath, resourceSuffix);
+            DataManager.getDefault().loadSkin(pluginAPKPackageName, pluginAPKPath, resourceSuffix);
             return null;
         }
 
         @Override
         protected void onPostExecute(Void aVoid) {
-            if (mNeedCallSkinChangeListener) {
+            if (mNeedCallSkinChangeListenerFlag) {
                 for (OnChangeSkinListener onChangeSkinListener : mOnChangeSkinListenerList) {
                     onChangeSkinListener.onChangeSkinSuccess();
                 }
@@ -180,7 +215,7 @@ public class SkinLoader implements ILoadSkin {
 
         @Override
         protected void onCancelled() {
-            if (mNeedCallSkinChangeListener) {
+            if (mNeedCallSkinChangeListenerFlag) {
                 for (OnChangeSkinListener onChangeSkinListener : mOnChangeSkinListenerList) {
                     onChangeSkinListener.onChangeSkinError();
                 }
@@ -192,15 +227,33 @@ public class SkinLoader implements ILoadSkin {
         private Handler mHandler = new Handler(Looper.getMainLooper());
 
         @Override
-        public void postResourceManagerLoadSuccess(final boolean firstInit, String pluginPackageName, String pluginPath, String resourceSuffix) {
+        public void postDataManagerLoadSuccess(String pluginPackageName, String pluginPath, String resourceSuffix) {
+            SkinL.d("保存本次换肤的相关信息成功");
+            ResourceManager.getDefault().loadSkin(pluginPackageName, pluginPath, resourceSuffix);
+        }
+
+        @Override
+        public void postDataManagerLoadError() {
+            SkinL.d("保存本次换肤的相关信息和上次一样");
+        }
+
+        @Override
+        public void postResourceManagerLoadSuccess(final boolean firstInit, final String pluginPackageName, final String pluginPath, final String resourceSuffix) {
             SkinL.d("生成Resource对象成功");
-            DataManager.getDefault().loadSkin(pluginPackageName, pluginPath, resourceSuffix);
 
             mHandler.post(new Runnable() {
                 @Override
                 public void run() {
-                    if (firstInit && mOnInitListener != null) {
-                        mOnInitListener.onInitSuccess();
+                    if (firstInit && mOnInitLoadSkinResourceListener != null) {
+                        mOnInitLoadSkinResourceListener.onInitResourceSuccess();
+                    } else {
+                        boolean changedSkinSuccess = notifyAllChangeSkinObserverList();
+
+                        if (changedSkinSuccess) {
+                            postGetAllResourceSuccessOnMainThread(pluginPackageName, pluginPath, resourceSuffix);
+                        } else {
+                            postGetResourceErrorOnMainThread();
+                        }
                     }
                 }
             });
@@ -214,36 +267,37 @@ public class SkinLoader implements ILoadSkin {
                 @Override
                 public void run() {
                     if (firstInit) {
+                        SkinL.d("还原默认皮肤");
                         restoreDefaultSkinInner(false);
 
-                        if (mOnInitListener != null) {
-                            mOnInitListener.onInitError();
+                        if (mOnInitLoadSkinResourceListener != null) {
+                            mOnInitLoadSkinResourceListener.onInitResourceError();
                         }
                     } else {
+                        SkinL.d("还原上一套皮肤");
                         restoreLastSkinInner(false);
                     }
                 }
             });
         }
 
-        @Override
-        public void postDataManagerLoadSuccess(String pluginPackageName, String pluginPath, String resourceSuffix) {
-            SkinL.d("保存本次换肤的相关信息成功");
-            GlobalManager.getDefault().flushPluginInfos(pluginPackageName, pluginPath, resourceSuffix);
 
-            mHandler.post(new Runnable() {
-                @Override
-                public void run() {
-                    for (IChangeSkin changeSkin : mChangeSkinObserverList) {
-                        changeSkin.onChangeSkin();
-                    }
-                }
-            });
+        @Override
+        public void postGetResourceErrorOnMainThread() {
+            SkinL.d("更改资源失败");
+            if (mJustRegisteredFlag) {
+                SkinL.d("还原默认皮肤");
+                restoreDefaultSkinInner(false);
+            } else {
+                SkinL.d("还原上一套皮肤");
+                restoreLastSkinInner(false);
+            }
         }
 
         @Override
-        public void postDataManagerLoadError() {
-            SkinL.d("保存本次换肤的相关信息和上次一样");
+        public void postGetAllResourceSuccessOnMainThread(String pluginPackageName, String pluginPath, String resourceSuffix) {
+            SkinL.d("更改所有资源成功");
+            GlobalManager.getDefault().flushPluginInfos(pluginPackageName, pluginPath, resourceSuffix);
         }
     }
 }

@@ -5,6 +5,7 @@ import android.os.Build;
 
 import com.rrtoyewx.andskinlibrary.base.BaseSkinActivity;
 import com.rrtoyewx.andskinlibrary.interfaces.IChangeSkin;
+import com.rrtoyewx.andskinlibrary.util.SkinL;
 
 /**
  * Created by Rrtoyewx on 2016/11/17.
@@ -25,10 +26,11 @@ public class StatusBarCompat implements IChangeSkin {
     }
 
     @Override
-    public void onChangeSkin() {
+    public boolean onChangeSkin() {
         if (mStatusBar != null) {
-            mStatusBar.onChangeSkin();
+            return mStatusBar.onChangeSkin();
         }
+        return true;
     }
 
     public int getCurrentStatusColor() {

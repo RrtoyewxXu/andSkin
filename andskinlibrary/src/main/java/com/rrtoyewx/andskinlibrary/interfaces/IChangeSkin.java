@@ -5,5 +5,5 @@ package com.rrtoyewx.andskinlibrary.interfaces;
  */
 
 public interface IChangeSkin{
-    void onChangeSkin();
+    boolean onChangeSkin();
 }

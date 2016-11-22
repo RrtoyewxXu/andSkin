@@ -1,8 +1,10 @@
 package com.rrtoyewx.andskinlibrary.attr;
 
+import android.graphics.drawable.Drawable;
 import android.view.View;
 
 import com.rrtoyewx.andskinlibrary.manager.ResourceManager;
+import com.rrtoyewx.andskinlibrary.resource.Resource;
 import com.rrtoyewx.andskinlibrary.util.SkinL;
 
 /**
@@ -16,13 +18,25 @@ public class BackgroundAttr extends BaseSkinAttr {
     }
 
     @Override
-    public void applySkin(View view) {
+    public boolean applySkin(View view) {
         if (TYPE_ATTR_DRAWABLE.equals(mAttrType)) {
-            view.setBackgroundDrawable(ResourceManager.getDefault().getDataResource().getDrawableByName(mAttrValueRef));
-            SkinL.d(view + " : " + mAttrName + " apply " + mAttrValueRef);
+            Drawable drawable = ResourceManager.getDefault().getDataResource().getDrawableByName(mAttrValueRef);
+            if (drawable != null) {
+                view.setBackgroundDrawable(drawable);
+                SkinL.d(view + " : " + mAttrName + " apply " + mAttrValueRef);
+            }
+
+            return drawable != null;
+
         } else if (TYPE_ATTR_COLOR.equals(mAttrType)) {
-            view.setBackgroundColor(ResourceManager.getDefault().getDataResource().getColorByName(mAttrValueRef));
-            SkinL.d(view + " : " + mAttrName + " apply " + mAttrValueRef);
+            int color = ResourceManager.getDefault().getDataResource().getColorByName(mAttrValueRef);
+            if (color != Resource.VALUE_ERROR_COLOR) {
+                view.setBackgroundColor(color);
+                SkinL.d(view + " : " + mAttrName + " apply " + mAttrValueRef);
+            }
+            return color != Resource.VALUE_ERROR_COLOR;
         }
+
+        return true;
     }
 }

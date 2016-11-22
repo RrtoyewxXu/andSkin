@@ -11,6 +11,8 @@ import android.text.TextUtils;
  */
 
 public abstract class Resource {
+    public static final int VALUE_ERROR_COLOR = Integer.MIN_VALUE;
+
     protected Context mContext;
     protected Resources mResources;
     protected String mResourcesSuffix;
@@ -28,7 +30,7 @@ public abstract class Resource {
     public abstract int getColorByName(String colorResName);
 
     public abstract Drawable getDrawableByName(String drawableResName);
-    
+
     public abstract ColorStateList getColorStateListByName(String colorStateListResName);
 
     final String appendSuffix(String name) {

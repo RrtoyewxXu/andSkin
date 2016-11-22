@@ -23,7 +23,7 @@ public abstract class ResourceFactory {
         return new ResourceFactoryImp();
     }
 
-    public abstract Resource createResource(String pluginPackageName, String pluginPath, String suffix) throws Exception;
+    public abstract Resource createResource(String pluginPackageName, String pluginPath, String suffix, IDeliver deliver) throws Exception;
 
 
     static class ResourceFactoryImp extends ResourceFactory {
@@ -32,7 +32,7 @@ public abstract class ResourceFactory {
         }
 
         @Override
-        public Resource createResource(String pluginPackageName, String pluginPath, String suffix) throws Exception {
+        public Resource createResource(String pluginPackageName, String pluginPath, String suffix, IDeliver deliver) throws Exception {
             String packageName = GlobalManager.getDefault().getPackageName();
             Context context = GlobalManager.getDefault().getApplicationContext();
 

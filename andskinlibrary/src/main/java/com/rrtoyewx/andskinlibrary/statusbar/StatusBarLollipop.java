@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.view.WindowManager;
 
 import com.rrtoyewx.andskinlibrary.base.BaseSkinActivity;
+import com.rrtoyewx.andskinlibrary.resource.Resource;
 
 /**
  * Created by Rrtoyewx on 2016/11/17.
@@ -22,7 +23,11 @@ public class StatusBarLollipop extends StatusBar {
     }
 
     @Override
-    public void onChangeSkin() {
-        mWindow.setStatusBarColor(getColor());
+    public boolean onChangeSkin() {
+        int color = getColor();
+        if (color != Resource.VALUE_ERROR_COLOR) {
+            mWindow.setStatusBarColor(color);
+        }
+        return color != Resource.VALUE_ERROR_COLOR;
     }
 }
