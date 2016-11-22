@@ -23,11 +23,18 @@ public class StatusBarLollipop extends StatusBar {
     }
 
     @Override
-    public boolean onChangeSkin() {
-        int color = getColor();
-        if (color != Resource.VALUE_ERROR_COLOR) {
-            mWindow.setStatusBarColor(color);
+    public boolean findResource() {
+        resetFindColor();
+        mFindColor = getColor();
+
+        return mFindColor != Resource.VALUE_ERROR_COLOR;
+    }
+
+    @Override
+    public void changeSkin() {
+        if (mFindColor != Resource.VALUE_ERROR_COLOR) {
+            mWindow.setStatusBarColor(mFindColor);
         }
-        return color != Resource.VALUE_ERROR_COLOR;
+        resetFindColor();
     }
 }

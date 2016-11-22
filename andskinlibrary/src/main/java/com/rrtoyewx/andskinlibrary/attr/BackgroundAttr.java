@@ -19,25 +19,32 @@ public class BackgroundAttr extends BaseSkinAttr {
     }
 
     @Override
-    public boolean applySkin(View view) {
-        if (TYPE_ATTR_DRAWABLE.equals(mAttrType)) {
-            Drawable drawable = ResourceManager.getDefault().getDataResource().getDrawableByName(mAttrValueRef);
-            if (drawable != null) {
-                view.setBackgroundDrawable(drawable);
-                SkinL.d(view + " : " + mAttrName + " apply " + mAttrValueRef);
-            }
+    public boolean findResource() {
+        resetResourceValue();
 
-            return drawable != null;
+        if (TYPE_ATTR_DRAWABLE.equals(mAttrType)) {
+            mFindDrawable = ResourceManager.getDefault().getDataResource().getDrawableByName(mAttrValueRef);
+            return mFindDrawable != null;
 
         } else if (TYPE_ATTR_COLOR.equals(mAttrType)) {
-            int color = ResourceManager.getDefault().getDataResource().getColorByName(mAttrValueRef);
-            if (color != Resource.VALUE_ERROR_COLOR) {
-                view.setBackgroundColor(color);
-                SkinL.d(view + " : " + mAttrName + " apply " + mAttrValueRef);
-            }
-            return color != Resource.VALUE_ERROR_COLOR;
+            mFindColor = ResourceManager.getDefault().getDataResource().getColorByName(mAttrValueRef);
+            return mFindColor != Resource.VALUE_ERROR_COLOR;
+
+        }
+        return true;
+    }
+
+    @Override
+    public void applySkin(View view) {
+        if (TYPE_ATTR_DRAWABLE.equals(mAttrType) && mFindDrawable != null) {
+            view.setBackgroundDrawable(mFindDrawable);
+            SkinL.d(view + " : " + mAttrName + " apply " + mAttrValueRef);
+
+        } else if (TYPE_ATTR_COLOR.equals(mAttrType) && mFindColor != Resource.VALUE_ERROR_COLOR) {
+            view.setBackgroundColor(mFindColor);
+            SkinL.d(view + " : " + mAttrName + " apply " + mAttrValueRef);
         }
 
-        return true;
+        resetResourceValue();
     }
 }

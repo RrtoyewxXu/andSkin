@@ -68,11 +68,11 @@ public class BaseSkinActivity extends AppCompatActivity implements IChangeSkin {
     }
 
     @Override
-    public boolean onChangeSkin() {
+    public boolean findResource() {
         boolean changed = true;
 
         if (mStatusBar != null) {
-            changed = mStatusBar.onChangeSkin();
+            changed = mStatusBar.findResource();
         }
 
         if (!changed) {
@@ -84,12 +84,23 @@ public class BaseSkinActivity extends AppCompatActivity implements IChangeSkin {
         }
 
         for (IChangeSkin skinView : mSkinList) {
-            changed = skinView.onChangeSkin();
+            changed = skinView.findResource();
             if (!changed) {
                 break;
             }
         }
         return changed;
+    }
+
+    @Override
+    public void changeSkin() {
+        if (mStatusBar != null) {
+            mStatusBar.changeSkin();
+        }
+
+        for (IChangeSkin skinView : mSkinList) {
+            skinView.changeSkin();
+        }
     }
 
     @Override

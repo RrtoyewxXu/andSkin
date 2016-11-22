@@ -5,7 +5,6 @@ import android.os.Build;
 
 import com.rrtoyewx.andskinlibrary.base.BaseSkinActivity;
 import com.rrtoyewx.andskinlibrary.interfaces.IChangeSkin;
-import com.rrtoyewx.andskinlibrary.util.SkinL;
 
 /**
  * Created by Rrtoyewx on 2016/11/17.
@@ -26,11 +25,18 @@ public class StatusBarCompat implements IChangeSkin {
     }
 
     @Override
-    public boolean onChangeSkin() {
+    public boolean findResource() {
         if (mStatusBar != null) {
-            return mStatusBar.onChangeSkin();
+            return mStatusBar.findResource();
         }
         return true;
+    }
+
+    @Override
+    public void changeSkin() {
+        if (mStatusBar != null) {
+            mStatusBar.changeSkin();
+        }
     }
 
     public int getCurrentStatusColor() {

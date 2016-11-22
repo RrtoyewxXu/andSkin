@@ -37,12 +37,18 @@ public class StatusBarKitKat extends StatusBar {
     }
 
     @Override
-    public boolean onChangeSkin() {
-        int color = getColor();
-        if (mFakerView != null && color != Resource.VALUE_ERROR_COLOR) {
-            mFakerView.setBackgroundColor(color);
+    public boolean findResource() {
+        resetFindColor();
+        mFindColor = getColor();
+        return mFindColor != Resource.VALUE_ERROR_COLOR;
+    }
+
+    @Override
+    public void changeSkin() {
+        if (mFakerView != null && mFindColor != Resource.VALUE_ERROR_COLOR) {
+            mFakerView.setBackgroundColor(mFindColor);
         }
-        return color != Resource.VALUE_ERROR_COLOR;
+        resetFindColor();
     }
 
     private int getStatusBarHeight() {

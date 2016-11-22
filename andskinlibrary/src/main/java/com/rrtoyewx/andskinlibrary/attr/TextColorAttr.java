@@ -20,15 +20,26 @@ public class TextColorAttr extends BaseSkinAttr {
     }
 
     @Override
-    public boolean applySkin(View view) {
-        if (view instanceof TextView && TYPE_ATTR_COLOR.equals(mAttrType)) {
-            ColorStateList colorStateList = ResourceManager.getDefault().getDataResource().getColorStateListByName(mAttrValueRef);
-            if (colorStateList != null) {
-                ((TextView) view).setTextColor(colorStateList);
-                SkinL.d(view + " : " + mAttrName + " apply " + mAttrValueRef);
-            }
-            return colorStateList != null;
+    public boolean findResource() {
+        resetResourceValue();
+
+        if (TYPE_ATTR_COLOR.equals(mAttrType)) {
+            mFindColorStateList = ResourceManager.getDefault().getDataResource().getColorStateListByName(mAttrValueRef);
+            return mFindColorStateList != null;
         }
         return true;
+    }
+
+    @Override
+    public void applySkin(View view) {
+        if (view instanceof TextView
+                && TYPE_ATTR_COLOR.equals(mAttrType)
+                && mFindColorStateList != null) {
+
+            ((TextView) view).setTextColor(mFindColorStateList);
+            SkinL.d(view + " : " + mAttrName + " apply " + mAttrValueRef);
+        }
+
+        resetResourceValue();
     }
 }

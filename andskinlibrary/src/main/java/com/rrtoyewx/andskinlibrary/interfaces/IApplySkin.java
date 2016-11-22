@@ -7,5 +7,7 @@ import android.view.View;
  */
 
 public interface IApplySkin {
-    boolean applySkin(View view);
+    boolean findResource();
+
+    void applySkin(View view);
 }

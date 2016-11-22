@@ -82,9 +82,9 @@ public class SkinLoader implements ILoadSkin {
         mChangeSkinObserverList.add(changeSkinObserver);
 
         mJustRegisteredFlag = true;
-        boolean changeSkinResult = notifyChangeSkinObserver(changeSkinObserver);
-        if (changeSkinResult) {
-            mLoadSkinDeliver.postGetAllResourceSuccessOnMainThread(DataManager.getDefault().getPluginPackageName(), DataManager.getDefault().getPluginPath(), DataManager.getDefault().getResourceSuffix());
+        boolean findResourceSuccessFlag = notifyChangeSkinObserverToFindResource(changeSkinObserver);
+        if (findResourceSuccessFlag) {
+            notifyChangeSkinObserverToApplySkin(changeSkinObserver);
         } else {
             mLoadSkinDeliver.postDataManagerLoadError();
         }
@@ -159,11 +159,11 @@ public class SkinLoader implements ILoadSkin {
         mLoadSkinTask.execute(pluginAPKPackageName, pluginAPKPath, resourceSuffix);
     }
 
-    private boolean notifyAllChangeSkinObserverList() {
+    private boolean notifyAllChangeSkinObserverListToFindResource() {
         boolean changedSkinSuccess = true;
-        SkinL.d("通知所有skin观察者进行换肤");
+        SkinL.d("通知所有的观察者查找资源");
         for (IChangeSkin changeSkin : mChangeSkinObserverList) {
-            changedSkinSuccess = changeSkin.onChangeSkin();
+            changedSkinSuccess = changeSkin.findResource();
             if (!changedSkinSuccess) {
                 break;
             }
@@ -171,9 +171,21 @@ public class SkinLoader implements ILoadSkin {
         return changedSkinSuccess;
     }
 
-    private boolean notifyChangeSkinObserver(IChangeSkin changeSkinObserver) {
-        boolean changeSkinResult = changeSkinObserver.onChangeSkin();
-        return changeSkinResult;
+    private void notifyAllChangeSkinObserverListToApplySKin() {
+        SkinL.d("通知所有的组件进行换肤");
+        for (IChangeSkin changeSkin : mChangeSkinObserverList) {
+            changeSkin.changeSkin();
+        }
+    }
+
+    private boolean notifyChangeSkinObserverToFindResource(IChangeSkin changeSkinObserver) {
+        SkinL.d("通知当前观察者进行查找资源");
+        return changeSkinObserver.findResource();
+    }
+
+    private void notifyChangeSkinObserverToApplySkin(IChangeSkin changeSkinObserver) {
+        SkinL.d("通知当前观察者进行换肤");
+        changeSkinObserver.changeSkin();
     }
 
     private class LoadSkinTask extends AsyncTask<String, Void, Void> {
@@ -247,7 +259,7 @@ public class SkinLoader implements ILoadSkin {
                     if (firstInit && mOnInitLoadSkinResourceListener != null) {
                         mOnInitLoadSkinResourceListener.onInitResourceSuccess();
                     } else {
-                        boolean changedSkinSuccess = notifyAllChangeSkinObserverList();
+                        boolean changedSkinSuccess = notifyAllChangeSkinObserverListToFindResource();
 
                         if (changedSkinSuccess) {
                             postGetAllResourceSuccessOnMainThread(pluginPackageName, pluginPath, resourceSuffix);
@@ -284,7 +296,7 @@ public class SkinLoader implements ILoadSkin {
 
         @Override
         public void postGetResourceErrorOnMainThread() {
-            SkinL.d("更改资源失败");
+            SkinL.d("查找资源失败");
             if (mJustRegisteredFlag) {
                 SkinL.d("还原默认皮肤");
                 restoreDefaultSkinInner(false);
@@ -296,8 +308,9 @@ public class SkinLoader implements ILoadSkin {
 
         @Override
         public void postGetAllResourceSuccessOnMainThread(String pluginPackageName, String pluginPath, String resourceSuffix) {
-            SkinL.d("更改所有资源成功");
+            SkinL.d("查找所有资源成功");
             GlobalManager.getDefault().flushPluginInfos(pluginPackageName, pluginPath, resourceSuffix);
+            notifyAllChangeSkinObserverListToApplySKin();
         }
     }
 }

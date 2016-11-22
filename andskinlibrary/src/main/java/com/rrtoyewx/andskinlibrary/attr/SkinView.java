@@ -1,8 +1,6 @@
 package com.rrtoyewx.andskinlibrary.attr;
 
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ListView;
 
 import com.rrtoyewx.andskinlibrary.interfaces.IChangeSkin;
 
@@ -63,15 +61,22 @@ public class SkinView implements IChangeSkin {
     }
 
     @Override
-    public boolean onChangeSkin() {
+    public boolean findResource() {
         boolean changed = true;
         for (BaseSkinAttr attr : mSkinAttrList) {
-            changed = attr.applySkin(mView);
+            changed = attr.findResource();
             if (!changed) {
                 break;
             }
         }
 
         return changed;
+    }
+
+    @Override
+    public void changeSkin() {
+        for (BaseSkinAttr attr : mSkinAttrList) {
+            attr.applySkin(mView);
+        }
     }
 }

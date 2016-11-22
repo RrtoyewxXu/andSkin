@@ -10,21 +10,32 @@ import android.widget.ImageView;
  */
 
 public class SrcAttr extends BaseSkinAttr {
+    private Drawable mFindDrawable;
 
     public SrcAttr(String mAttrType, String mAttrName, String mAttrValueRef) {
         super(mAttrType, mAttrName, mAttrValueRef);
     }
 
     @Override
-    public boolean applySkin(View view) {
-        if (TYPE_ATTR_DRAWABLE.equals(mAttrType) && view instanceof ImageView) {
-            Drawable drawable = getResource().getDrawableByName(mAttrValueRef);
-            if (drawable != null) {
-                ((ImageView) view).setImageDrawable(drawable);
-            }
-            return drawable != null;
+    public boolean findResource() {
+        resetResourceValue();
+        if (TYPE_ATTR_DRAWABLE.equals(mAttrType)) {
+            mFindDrawable = getResource().getDrawableByName(mAttrValueRef);
+            return mFindDrawable != null;
         }
         return true;
     }
 
+
+    @Override
+    public void applySkin(View view) {
+        if (TYPE_ATTR_DRAWABLE.equals(mAttrType)
+                && view instanceof ImageView
+                && mFindDrawable != null) {
+
+            ((ImageView) view).setImageDrawable(mFindDrawable);
+        }
+
+        resetResourceValue();
+    }
 }
