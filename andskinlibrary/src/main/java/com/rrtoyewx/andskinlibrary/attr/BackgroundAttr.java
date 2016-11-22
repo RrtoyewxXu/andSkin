@@ -9,6 +9,7 @@ import com.rrtoyewx.andskinlibrary.util.SkinL;
 
 /**
  * Created by Rrtoyewx on 2016/10/24.
+ * 背景的属性
  */
 
 public class BackgroundAttr extends BaseSkinAttr {

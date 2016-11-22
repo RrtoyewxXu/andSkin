@@ -10,7 +10,7 @@ import com.rrtoyewx.andskinlibrary.manager.SkinLoader;
  * SkinLoaderManager初始化
  */
 
-public abstract class BaseSkinApplication extends Application {
+public class BaseSkinApplication extends Application {
 
     @Override
     public void onCreate() {
@@ -25,10 +25,12 @@ public abstract class BaseSkinApplication extends Application {
      * 注意：此时 DataManager,ResourceManager,GlobalManager此时并未初始化
      * 此时可以设定OnInitListener 来检测初始化成功还是失败。这里的成功和失败，是加载上一次插件皮肤资源包的成功和失败。
      */
-    public abstract void beforeInit();
+    public void beforeInit() {
+    }
 
     /**
      * SkinLoader:初始化SkinLoader之后
      */
-    public abstract void afterInit();
+    public void afterInit() {
+    }
 }

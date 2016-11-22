@@ -8,8 +8,10 @@ import com.rrtoyewx.andskinlibrary.manager.GlobalManager;
 
 public class ConfigConstants {
     //-------------------------------
-    public static final String NAMES_SPACE = "http://schemas.android.com/android/andSkin";
+    public static final String SKIN_NAMES_SPACE = "http://schemas.android.com/android/andSkin";
+    public static final String ANDROID_NAMES_SPACE = "http://schemas.android.com/apk/res/android";
     public static final String ATTR_SKIN_ENABLE = "enable";
+    public static final String ATTR_SKIN_LIST = "attrs";
 
     //--------------------------shared preferences name---------------------
     public static final String NAME_SHARE_PREFERENCES = "and_skin";

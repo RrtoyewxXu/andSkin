@@ -82,7 +82,9 @@
                 android:layout_gravity="center_horizontal"
                 android:background="@drawable/bg_image_selector"
                 android:clickable="true"
-                skin:enable="true" />
+                android:src="@drawable/bg_image_selector"
+                skin:enable="true"
+                skin:attrs="src" />
 
             <TextView
                 android:id="@+id/tv_main_content"

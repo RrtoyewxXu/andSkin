@@ -1,6 +1,8 @@
 package com.rrtoyewx.andskinlibrary.attr;
 
 import com.rrtoyewx.andskinlibrary.interfaces.IApplySkin;
+import com.rrtoyewx.andskinlibrary.manager.ResourceManager;
+import com.rrtoyewx.andskinlibrary.resource.Resource;
 
 /**
  * Created by Rrtoyewx on 2016/10/24.
@@ -19,6 +21,10 @@ public abstract class BaseSkinAttr implements IApplySkin {
         this.mAttrType = mAttrType;
         this.mAttrName = mAttrName;
         this.mAttrValueRef = mAttrValueRef;
+    }
+
+    final Resource getResource(){
+        return ResourceManager.getDefault().getDataResource();
     }
 
     @Override
