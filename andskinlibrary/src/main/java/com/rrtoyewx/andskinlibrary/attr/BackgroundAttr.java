@@ -1,6 +1,5 @@
 package com.rrtoyewx.andskinlibrary.attr;
 
-import android.graphics.drawable.Drawable;
 import android.view.View;
 
 import com.rrtoyewx.andskinlibrary.manager.ResourceManager;

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:skin="http://schemas.android.com/android/andSkin"
+    android:id="@+id/ll_item_main_list_container"
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:background="@color/bg_main_list_selector"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    skin:enable="true">
+
+    <ImageView
+        android:id="@+id/iv_item_main_list_icon"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginLeft="10dp"
+        android:scaleType="centerInside"
+        android:src="@drawable/img_main_list_icon"
+        skin:attrs="src"
+        skin:enable="true" />
+
+    <TextView
+        android:id="@+id/tv_item_main_list_hint_message"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:text="更改主题"
+        android:textColor="@color/color_main_list_text"
+        android:textSize="16sp"
+        skin:enable="true"/>
+</LinearLayout>

@@ -1,13 +1,21 @@
 package com.rrtoyewx.andskin.activity;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+
 import com.rrtoyewx.andskin.R;
+import com.rrtoyewx.andskin.adapter.MainListAdapter;
 import com.rrtoyewx.andskinlibrary.base.BaseSkinActivity;
 import com.rrtoyewx.andskinlibrary.listener.OnChangeSkinListener;
 import com.rrtoyewx.andskinlibrary.manager.SkinLoader;
@@ -16,22 +24,19 @@ import com.rrtoyewx.andskinlibrary.util.SkinL;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class MainActivity extends BaseSkinActivity {
-    TextView mContentTv;
+    private ListView mContentListView;
 
-    Button mChangeBlueSkinByLocalBtn;
-    Button mChangeRedSkinByLocalBtn;
+    private MainListAdapter mListAdapter;
+    private List<String> mHintMessageStrList;
 
-    Button mChangYellowSkinPluginBtn;
-    Button mChangeGreenSkinPluginBtn;
-
-    Button mRestoreSkinBtn;
-    Button mErrorBtn;
-
-    Button mTestColorSelectorBtn;
-    Button mLoadErrorResourceBtn;
-
+    static String[] sHintMessage = {
+            "更换皮肤"
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,111 +49,34 @@ public class MainActivity extends BaseSkinActivity {
     }
 
     private void initView() {
-        mContentTv = (TextView) findViewById(R.id.tv_main_content);
-
-        mChangeBlueSkinByLocalBtn = (Button) findViewById(R.id.btn_main_change_local_blue);
-        mChangeRedSkinByLocalBtn = (Button) findViewById(R.id.btn_main_change_local_red);
-
-        mChangYellowSkinPluginBtn = (Button) findViewById(R.id.btn_main_change_plugin_yellow);
-        mChangeGreenSkinPluginBtn = (Button) findViewById(R.id.btn_main_change_plugin_green);
-
-        mRestoreSkinBtn = (Button) findViewById(R.id.btn_main_restore_skin);
-        mErrorBtn = (Button) findViewById(R.id.btn_main_error);
-
-        mTestColorSelectorBtn = (Button) findViewById(R.id.btn_main_test_color_selector);
-        mLoadErrorResourceBtn = (Button) findViewById(R.id.btn_main_load_error_resource_plugin);
-    }
-
-    @Override
-    protected String overrideStatusBarColorResName() {
-        return "status_color";
+        mContentListView = (ListView) findViewById(R.id.lv_main_content);
     }
 
     private void initData() {
-        String content = geFileFromAssets(this, "Article.txt");
-        mContentTv.setText(content);
+        mHintMessageStrList = new ArrayList<>();
+        mHintMessageStrList.addAll(Arrays.asList(sHintMessage));
+
+        mListAdapter = new MainListAdapter(this);
+        mListAdapter.setMessageStrList(mHintMessageStrList);
+        mContentListView.setAdapter(mListAdapter);
     }
 
     private void bindEvent() {
-        mChangeBlueSkinByLocalBtn.setOnClickListener(new View.OnClickListener() {
+        mContentListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onClick(View v) {
-                SkinL.d("change skin local blue");
-                SkinLoader.getDefault().loadSkin("blue");
-            }
-        });
-
-        mChangeRedSkinByLocalBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                SkinL.d("change skin local red");
-                SkinLoader.getDefault().loadSkin("red");
-            }
-        });
-
-        mChangYellowSkinPluginBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                SkinL.d("change skin plugin yellow");
-                SkinLoader.getDefault().loadSkin("com.rrtoyewx.plugin", "plugin-debug.apk", "yellow");
-            }
-        });
-
-        mChangeGreenSkinPluginBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                SkinL.d("change skin plugin green");
-                SkinLoader.getDefault().loadSkin("com.rrtoyewx.plugin", "plugin-debug.apk", "green");
-            }
-        });
-
-        mRestoreSkinBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                SkinL.d("restore skin");
-                SkinLoader.getDefault().restoreDefaultSkin();
-            }
-        });
-
-        mErrorBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                SkinL.d("click error");
-                SkinLoader.getDefault().loadSkin("com.rrtoyewx.plugin", "plugin.apk", "green");
-            }
-        });
-
-        SkinLoader.getDefault().addOnChangeSkinListener(new OnChangeSkinListener(this) {
-            @Override
-            public void onChangeSkinBegin() {
-                SkinL.d("onChangeSkinBegin");
-            }
-
-            @Override
-            public void onChangeSkinError() {
-                SkinL.d("onChangeSkinError");
-            }
-
-            @Override
-            public void onChangeSkinSuccess() {
-                SkinL.d("onChangeSkinSuccess");
-            }
-        });
-
-        mTestColorSelectorBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int color = getResources().getColor(R.color.bg_btn_selector);
-            }
-        });
-
-        mLoadErrorResourceBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                SkinLoader.getDefault().loadSkin("com.rrtoyewx.plugin", "plugin-debug.apk", "red");
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                switch (position) {
+                    case 0:
+                        startChangeSkinConfigActivity();
+                }
             }
         });
     }
+
+    private void startChangeSkinConfigActivity() {
+        startActivity(new Intent(this, ChangeSkinConfigActivity.class));
+    }
+
 
     private String geFileFromAssets(Context context, String fileName) {
         StringBuilder s = new StringBuilder("");
