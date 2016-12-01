@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--green 有一个资源项找不到 模拟findResource出错 color_lack_some_resource_text_green -->
+    <color name="color_main_list_text_blue">@color/blue</color>
+
+    <color name="bg_change_config_activity_blue">#770000ff</color>
+
+    <color name="color_display_content_text_blue">#770000ff</color>
+    <color name="color_display_content_background_blue">@color/grayAA</color>
+
+    <color name="color_lack_some_resource_text_blue">@color/blue</color>
+
+    <color name="status_bar_color_blue">@color/blue</color>
+</resources>

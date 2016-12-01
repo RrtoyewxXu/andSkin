@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Looper;
 
+import com.rrtoyewx.andskinlibrary.attr.SkinView;
 import com.rrtoyewx.andskinlibrary.deliver.IDeliver;
 import com.rrtoyewx.andskinlibrary.interfaces.IChangeSkin;
 import com.rrtoyewx.andskinlibrary.interfaces.ILoadSkin;
@@ -86,7 +87,7 @@ public class SkinLoader implements ILoadSkin {
         if (findResourceSuccessFlag) {
             notifyChangeSkinObserverToApplySkin(changeSkinObserver);
         } else {
-            mLoadSkinDeliver.postDataManagerLoadError();
+            mLoadSkinDeliver.postGetResourceErrorOnMainThread();
         }
         mJustRegisteredFlag = false;
     }
@@ -104,6 +105,25 @@ public class SkinLoader implements ILoadSkin {
             if (changeSkinObserver == onChangeSkinListener.getBindActivity()
                     || onChangeSkinListener.getBindActivity() == null) {
                 iterator.remove();
+            }
+        }
+    }
+
+    public void dynamicAddSkinViewInObserver(List<SkinView> skinViewList, IChangeSkin changeSkinObserver) {
+        if (mOnChangeSkinListenerList.contains(changeSkinObserver)) {
+            throw new IllegalArgumentException(changeSkinObserver.getClass().getSimpleName() + "must be register!! please check");
+        }
+        boolean findResourceSuccess = true;
+        for (SkinView skinView : skinViewList) {
+            findResourceSuccess = skinView.findResource();
+            if (!findResourceSuccess) {
+                break;
+            }
+        }
+
+        if (findResourceSuccess) {
+            for (SkinView skinView : skinViewList) {
+                skinView.changeSkin();
             }
         }
     }
@@ -160,15 +180,15 @@ public class SkinLoader implements ILoadSkin {
     }
 
     private boolean notifyAllChangeSkinObserverListToFindResource() {
-        boolean changedSkinSuccess = true;
+        boolean findResourceSuccess = true;
         SkinL.d("通知所有的观察者查找资源");
         for (IChangeSkin changeSkin : mChangeSkinObserverList) {
-            changedSkinSuccess = changeSkin.findResource();
-            if (!changedSkinSuccess) {
+            findResourceSuccess = changeSkin.findResource();
+            if (!findResourceSuccess) {
                 break;
             }
         }
-        return changedSkinSuccess;
+        return findResourceSuccess;
     }
 
     private void notifyAllChangeSkinObserverListToApplySKin() {
@@ -259,9 +279,9 @@ public class SkinLoader implements ILoadSkin {
                     if (firstInit && mOnInitLoadSkinResourceListener != null) {
                         mOnInitLoadSkinResourceListener.onInitResourceSuccess();
                     } else {
-                        boolean changedSkinSuccess = notifyAllChangeSkinObserverListToFindResource();
+                        boolean findResourceSuccess = notifyAllChangeSkinObserverListToFindResource();
 
-                        if (changedSkinSuccess) {
+                        if (findResourceSuccess) {
                             postGetAllResourceSuccessOnMainThread(pluginPackageName, pluginPath, resourceSuffix);
                         } else {
                             postGetResourceErrorOnMainThread();

@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">andSkin</string>
+    <string name="hint_lack_some_resource">文本颜色的属性再green主题下，缺少资源，用来测试自动还原主题</string>
+    <string name="change_skin_success">换肤成功</string>
+    <string name="change_skin_begin">换肤开始</string>
+    <string name="change_skin_error">换肤失败</string>
 
 </resources>

@@ -129,7 +129,7 @@ skin:enable="true"
     SkinLoader.addOnChangeSkinListener(OnChangeSkinListener listener)
 ```
  
- > 注册监听的对象会随着在注册监听时所处于页面的消失而被自动remove掉，这个是为了内存泄漏的问题
+ > 注册监听的对象会随着在注册监听时所处于页面的消失而被自动remove掉，这个是为了解决内存泄漏的问题
  
 ## 一些细节的说明
 ### 对于应用打开初始化的过程
@@ -172,40 +172,40 @@ skin:enable="true"
 <!--```-->
 ### 对于应用启动后，点击换肤的流程图
 ![](images/loadSkin.jpeg)
-<!--```flow-->
-<!--st=>start: loadSkin-->
-<!--e=>end: loadSkinEnd-->
+```flow
+st=>start: loadSkin
+e=>end: loadSkinEnd
 
-<!--saveDataManager=>operation: DataManager存储需要换肤的相关信息-->
-<!--saveDataManagerCondition=>condition:  DataManager存储信息成功？-->
+saveDataManager=>operation: DataManager存储需要换肤的相关信息
+saveDataManagerCondition=>condition:  DataManager存储信息成功？
 
-<!--generateResource=>operation: 生成Resource对象-->
-<!--generateResourceCondition=>condition: Resource对象生成成功？-->
+generateResource=>operation: 生成Resource对象
+generateResourceCondition=>condition: Resource对象生成成功？
 
-<!--notifyAllChangeSkinObserverList=>operation: 通知所有注册页面更换资源-->
-<!--findAllResource=>operation: 查找所有的资源-->
-<!--findAllResourceCondition=>condition: 查找所有的资源成功？-->
+notifyAllChangeSkinObserverList=>operation: 通知所有注册页面更换资源
+findAllResource=>operation: 查找所有的资源
+findAllResourceCondition=>condition: 查找所有的资源成功？
 
-<!--allChangeSkinObserverList=>operation: 所有控件进行更换操作-->
+allChangeSkinObserverList=>operation: 所有控件进行更换操作
 
-<!--restoreDefaultSkin=>operation: 还原默认的皮肤-->
-<!--restoreLastSkin=>operation: 还原上一套的皮肤-->
+restoreDefaultSkin=>operation: 还原默认的皮肤
+restoreLastSkin=>operation: 还原上一套的皮肤
 
-<!--flushGlobalManagerInfos=>operation: 刷新GlobalManager关于资源的相关信息-->
+flushGlobalManagerInfos=>operation: 刷新GlobalManager关于资源的相关信息
 
-<!--onLoadSkinError=>operation: 回调加载皮肤失败的监听-->
+onLoadSkinError=>operation: 回调加载皮肤失败的监听
 
-<!--onLoadSkinSuccess=>operation: 回调加载皮肤成功的监听-->
+onLoadSkinSuccess=>operation: 回调加载皮肤成功的监听
 
-<!--st->saveDataManager->saveDataManagerCondition-->
-<!--saveDataManagerCondition(yes)->generateResource->generateResourceCondition->generateResourceCondition(yes)->notifyAllChangeSkinObserverList->findAllResource->findAllResourceCondition->findAllResourceCondition(yes)->allChangeSkinObserverList->flushGlobalManagerInfos->onLoadSkinSuccess-->
+st->saveDataManager->saveDataManagerCondition
+saveDataManagerCondition(yes)->generateResource->generateResourceCondition->generateResourceCondition(yes)->notifyAllChangeSkinObserverList->findAllResource->findAllResourceCondition->findAllResourceCondition(yes)->allChangeSkinObserverList->flushGlobalManagerInfos->onLoadSkinSuccess
 
-<!--saveDataManagerCondition(no)->onLoadSkinError->restoreLastSkin->saveDataManager-->
+saveDataManagerCondition(no)->onLoadSkinError->restoreLastSkin->saveDataManager
 
-<!--generateResourceCondition(no)->onLoadSkinError->restoreLastSkin->saveDataManager-->
+generateResourceCondition(no)->onLoadSkinError->restoreLastSkin->saveDataManager
 
-<!--findAllResourceCondition(no)->onLoadSkinError->restoreLastSkin->saveDataManager-->
-<!--```-->
+findAllResourceCondition(no)->onLoadSkinError->restoreLastSkin->saveDataManager
+```
 > 说明</br>
 1. restoreLastSkin或者restoreDefaultSkin都是一次loadSkin的过程
 2. DataManager保存信息成功或者失败，成功是代表上一次资源相关信息和本次换肤的资源相关信息不一样，则需要保存，即为成功。反之则为失败</br>

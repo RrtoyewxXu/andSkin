@@ -1,4 +1,4 @@
-package com.rrtoyewx.andskinlibrary.factory;
+package com.rrtoyewx.andskinlibrary.layoutInflater;
 
 import android.content.Context;
 import android.support.v4.view.LayoutInflaterFactory;
@@ -9,6 +9,8 @@ import android.view.View;
 import com.rrtoyewx.andskinlibrary.attr.SkinView;
 import com.rrtoyewx.andskinlibrary.attr.BaseSkinAttr;
 import com.rrtoyewx.andskinlibrary.constant.ConfigConstants;
+import com.rrtoyewx.andskinlibrary.factory.AttrFactory;
+import com.rrtoyewx.andskinlibrary.listener.OnLayoutInflaterFinishListener;
 import com.rrtoyewx.andskinlibrary.manager.GlobalManager;
 import com.rrtoyewx.andskinlibrary.util.SkinL;
 
@@ -26,6 +28,7 @@ import java.util.List;
 
 public class SkinInflaterFactory implements LayoutInflaterFactory {
     private List<SkinView> mSkinViewList = new ArrayList<>();
+
 
     @Override
     public View onCreateView(View parent, String name, Context context, AttributeSet attrs) {
@@ -125,6 +128,8 @@ public class SkinInflaterFactory implements LayoutInflaterFactory {
             if (!viewAttrs.isEmpty()) {
                 skinView.setSkinAttrList(viewAttrs);
                 mSkinViewList.add(skinView);
+            } else {
+                SkinL.e("没有找到id为:" + idValue + "所支持的属性，固舍弃");
             }
 
         } else {
@@ -136,5 +141,13 @@ public class SkinInflaterFactory implements LayoutInflaterFactory {
 
     public List<SkinView> getSkinViewList() {
         return mSkinViewList;
+    }
+
+    /**
+     * clear all skin view
+     * 尽量少用，只有在动态加载layout的时候，先清空之前的skinView
+     */
+    public void clearSkinViewList() {
+        mSkinViewList.clear();
     }
 }

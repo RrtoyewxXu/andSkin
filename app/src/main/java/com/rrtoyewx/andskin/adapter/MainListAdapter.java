@@ -8,6 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.rrtoyewx.andskin.R;
+import com.rrtoyewx.andskinlibrary.base.BaseSkinActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,9 +20,9 @@ import java.util.List;
 
 public class MainListAdapter extends BaseAdapter {
     private List<String> mMessageStrList = new ArrayList<>();
-    private Context mContext;
+    private BaseSkinActivity mContext;
 
-    public MainListAdapter(Context context) {
+    public MainListAdapter(BaseSkinActivity context) {
         this.mContext = context;
     }
 
@@ -50,7 +51,8 @@ public class MainListAdapter extends BaseAdapter {
         MainListAdapterViewHolder viewHolder;
         if (convertView == null) {
             viewHolder = new MainListAdapterViewHolder();
-            convertView = LayoutInflater.from(mContext).inflate(R.layout.item_main_list, parent, false);
+            convertView = mContext.inflaterView(R.layout.item_main_list, parent, false);
+
             viewHolder.mHintMessageTV = (TextView) convertView.findViewById(R.id.tv_item_main_list_hint_message);
             convertView.setTag(viewHolder);
         } else {

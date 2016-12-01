@@ -1,29 +1,16 @@
 package com.rrtoyewx.andskin.activity;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
-
 
 import com.rrtoyewx.andskin.R;
 import com.rrtoyewx.andskin.adapter.MainListAdapter;
 import com.rrtoyewx.andskinlibrary.base.BaseSkinActivity;
-import com.rrtoyewx.andskinlibrary.listener.OnChangeSkinListener;
-import com.rrtoyewx.andskinlibrary.manager.SkinLoader;
-import com.rrtoyewx.andskinlibrary.util.SkinL;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -35,7 +22,9 @@ public class MainActivity extends BaseSkinActivity {
     private List<String> mHintMessageStrList;
 
     static String[] sHintMessage = {
-            "更换皮肤"
+            "更换皮肤",
+            "内容展示页",
+            "缺少部分资源的展示页"
     };
 
     @Override
@@ -68,6 +57,13 @@ public class MainActivity extends BaseSkinActivity {
                 switch (position) {
                     case 0:
                         startChangeSkinConfigActivity();
+                        break;
+                    case 1:
+                        startDisplayActivity();
+                        break;
+                    case 2:
+                        startLackResourceActivity();
+                        break;
                 }
             }
         });
@@ -77,21 +73,11 @@ public class MainActivity extends BaseSkinActivity {
         startActivity(new Intent(this, ChangeSkinConfigActivity.class));
     }
 
+    private void startDisplayActivity() {
+        startActivity(new Intent(this, DisplayActivity.class));
+    }
 
-    private String geFileFromAssets(Context context, String fileName) {
-        StringBuilder s = new StringBuilder("");
-        try {
-            InputStreamReader in = new InputStreamReader(context.getResources().getAssets().open(fileName));
-            BufferedReader br = new BufferedReader(in);
-            String line;
-            while ((line = br.readLine()) != null) {
-                s.append(line);
-                s.append("\n");
-            }
-            return s.toString();
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
+    private void startLackResourceActivity() {
+        startActivity(new Intent(this, LackSomeResourceActivity.class));
     }
 }

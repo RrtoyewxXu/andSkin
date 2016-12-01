@@ -1,20 +1,21 @@
 package com.rrtoyewx.andskinlibrary.base;
 
 import android.os.Bundle;
+import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
-import android.support.v4.view.LayoutInflaterCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.ViewGroup;
 
 import com.rrtoyewx.andskinlibrary.attr.SkinView;
-import com.rrtoyewx.andskinlibrary.factory.SkinInflaterFactory;
 import com.rrtoyewx.andskinlibrary.interfaces.IChangeSkin;
+import com.rrtoyewx.andskinlibrary.layoutInflater.SkinLayoutInflater;
 import com.rrtoyewx.andskinlibrary.manager.SkinLoader;
 import com.rrtoyewx.andskinlibrary.statusbar.StatusBarCompat;
 import com.rrtoyewx.andskinlibrary.util.SkinL;
 
-import java.util.Iterator;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -23,29 +24,48 @@ import java.util.List;
  *
  * @see #shouldRegister() :控制是否接受SkinLoader的OnChangeSkinEvent
  * @see #shouldChangeStatusBarColor() : 控制是否更改状态栏
- * @see GenerateAllSkinChangeObserverRunnable :根据id去查询当前需要更要的View，判断是否生成statusbar observer
  * @see #overrideStatusBarColorResName() : 覆盖statusBar color的资源文件，从而实现不同的activity的中状态栏的颜色不一样
  * @see #getStatusBarColor() : 获取当前的statusBar color的颜色
  */
 
 public class BaseSkinActivity extends AppCompatActivity implements IChangeSkin {
     protected BaseSkinActivity mActivity;
-    private List<SkinView> mSkinList;
     private StatusBarCompat mStatusBar;
-
-    private SkinInflaterFactory mSkinInflaterFactory;
+    private SkinLayoutInflater mSkinLayoutInflater;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         mActivity = this;
-
         if (shouldRegister()) {
-            mSkinInflaterFactory = new SkinInflaterFactory();
-            LayoutInflaterCompat.setFactory(getLayoutInflater(), mSkinInflaterFactory);
-            getWindow().getDecorView().post(new GenerateAllSkinChangeObserverRunnable());
+            mSkinLayoutInflater = new SkinLayoutInflater(this);
         }
-
         super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public void setContentView(@LayoutRes int layoutResID) {
+        super.setContentView(layoutResID);
+        if (shouldRegister()) {
+            findLayoutInflaterSkinViews();
+            generateStatusBarIfShould();
+            SkinLoader.getDefault().register(mActivity);
+        }
+    }
+
+    private void findLayoutInflaterSkinViews() {
+        List<SkinView> layoutInflaterSkinViewList = mSkinLayoutInflater.getLayoutInflaterSkinViewList();
+        SkinL.d(mActivity.getClass().getSimpleName() + " skinList : " + layoutInflaterSkinViewList.toString());
+    }
+
+    private void generateStatusBarIfShould() {
+        if (shouldChangeStatusBarColor()) {
+            mStatusBar = new StatusBarCompat(mActivity);
+
+            if (!TextUtils.isEmpty(overrideStatusBarColorResName())) {
+                mStatusBar.setStatusBarColorResName(overrideStatusBarColorResName());
+            }
+            SkinL.d("mStatusBar need change");
+        }
     }
 
     protected boolean shouldRegister() {
@@ -60,6 +80,18 @@ public class BaseSkinActivity extends AppCompatActivity implements IChangeSkin {
         return null;
     }
 
+    public SkinLayoutInflater getSkinLayoutInflater() {
+        return mSkinLayoutInflater;
+    }
+
+    public View inflaterView(@LayoutRes int resource, ViewGroup parentView) {
+        return this.inflaterView(resource, parentView, parentView != null);
+    }
+
+    public View inflaterView(@LayoutRes int resource, ViewGroup parentView, boolean attach) {
+        return mSkinLayoutInflater.inflaterView(resource, parentView, attach);
+    }
+
     public int getStatusBarColor() {
         if (mStatusBar != null) {
             return mStatusBar.getCurrentStatusColor();
@@ -69,27 +101,33 @@ public class BaseSkinActivity extends AppCompatActivity implements IChangeSkin {
 
     @Override
     public boolean findResource() {
-        boolean changed = true;
+        boolean findResourceSuccess = true;
 
         if (mStatusBar != null) {
-            changed = mStatusBar.findResource();
+            findResourceSuccess = mStatusBar.findResource();
         }
 
-        if (!changed) {
+        if (!findResourceSuccess) {
             return false;
         }
 
-        if (mSkinList == null || mSkinList.isEmpty()) {
-            return true;
-        }
-
-        for (IChangeSkin skinView : mSkinList) {
-            changed = skinView.findResource();
-            if (!changed) {
+        List<SkinView> layoutInflaterSkinViewList = mSkinLayoutInflater.getLayoutInflaterSkinViewList();
+        for (IChangeSkin skinView : layoutInflaterSkinViewList) {
+            findResourceSuccess = skinView.findResource();
+            if (!findResourceSuccess) {
                 break;
             }
         }
-        return changed;
+
+        List<SkinView> dynamicAddSkinViewList = mSkinLayoutInflater.getDynamicAddSkinViewList();
+        for (IChangeSkin skinView : dynamicAddSkinViewList) {
+            findResourceSuccess = skinView.findResource();
+            if (!findResourceSuccess) {
+                break;
+            }
+        }
+
+        return findResourceSuccess;
     }
 
     @Override
@@ -98,7 +136,13 @@ public class BaseSkinActivity extends AppCompatActivity implements IChangeSkin {
             mStatusBar.changeSkin();
         }
 
-        for (IChangeSkin skinView : mSkinList) {
+        List<SkinView> layoutInflaterSkinViewList = mSkinLayoutInflater.getLayoutInflaterSkinViewList();
+        for (IChangeSkin skinView : layoutInflaterSkinViewList) {
+            skinView.changeSkin();
+        }
+
+        List<SkinView> dynamicAddSkinViewList = mSkinLayoutInflater.getDynamicAddSkinViewList();
+        for (IChangeSkin skinView : dynamicAddSkinViewList) {
             skinView.changeSkin();
         }
     }
@@ -109,48 +153,5 @@ public class BaseSkinActivity extends AppCompatActivity implements IChangeSkin {
             SkinLoader.getDefault().unRegister(this);
         }
         super.onDestroy();
-    }
-
-    class GenerateAllSkinChangeObserverRunnable implements Runnable {
-        @Override
-        public void run() {
-            findChangeSkinViews();
-            generateStatusBarIfShould();
-            SkinLoader.getDefault().register(mActivity);
-        }
-
-        private void findChangeSkinViews() {
-            mSkinList = mSkinInflaterFactory.getSkinViewList();
-            if (mSkinList != null && !mSkinList.isEmpty()) {
-                View view = null;
-                Iterator<SkinView> iterator = mSkinList.iterator();
-                while (iterator.hasNext()) {
-                    SkinView skinView = iterator.next();
-
-                    int viewId = skinView.getViewId();
-                    view = findViewById(viewId);
-
-                    if (view != null) {
-                        skinView.setSkinView(view);
-                    } else {
-                        SkinL.d("未找到id value:" + viewId + ",请检查" + BaseSkinActivity.this.getClass().getSimpleName() + "xml文件");
-                        iterator.remove();
-                    }
-                }
-            }
-
-            SkinL.d(mActivity.getClass().getSimpleName() + " skinList : " + mSkinList.toString());
-        }
-
-        private void generateStatusBarIfShould() {
-            if (shouldChangeStatusBarColor()) {
-                mStatusBar = new StatusBarCompat(mActivity);
-
-                if (!TextUtils.isEmpty(overrideStatusBarColorResName())) {
-                    mStatusBar.setStatusBarColorResName(overrideStatusBarColorResName());
-                }
-                SkinL.d("mStatusBar need change");
-            }
-        }
     }
 }

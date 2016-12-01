@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--default-->
+    <color name="color_main_list_text">#444444</color>
+
+    <color name="bg_change_config_activity">#FFFFFF</color>
+
+    <color name="color_display_content_text">#565656</color>
+    <color name="color_display_content_background">@color/white</color>
+
+    <color name="color_lack_some_resource_text">@color/black</color>
+
+    <color name="status_bar_color">#000000</color>
+</resources>

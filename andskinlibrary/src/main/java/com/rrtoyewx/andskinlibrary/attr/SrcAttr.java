@@ -4,6 +4,8 @@ import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.rrtoyewx.andskinlibrary.util.SkinL;
+
 /**
  * Created by Rrtoyewx on 2016/11/22.
  * 图片的src属性
@@ -34,6 +36,7 @@ public class SrcAttr extends BaseSkinAttr {
                 && mFindDrawable != null) {
 
             ((ImageView) view).setImageDrawable(mFindDrawable);
+            SkinL.d(view + " : " + mAttrName + " apply " + mAttrValueRef);
         }
 
         resetResourceValue();
