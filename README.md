@@ -1,5 +1,5 @@
 # andSkin 
-支持应用内部换肤和外部插件换肤，目前支持background，src，textColor等属性，方便扩展。
+支持应用内部换肤和外部插件换肤，目前支持background，src，textColor等属性，支持状态栏，方便扩展。
 
 ## 优缺点
 ### 优点
