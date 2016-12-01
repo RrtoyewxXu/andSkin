@@ -8,7 +8,7 @@ import com.rrtoyewx.andskinlibrary.resource.Resource;
 
 /**
  * Created by Rrtoyewx on 2016/11/17.
- * SDK.VERSION:>21
+ * SDK.VERSION:21
  */
 @TargetApi(21)
 public class StatusBarLollipop extends StatusBar {

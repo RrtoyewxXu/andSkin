@@ -8,7 +8,7 @@ import com.rrtoyewx.andskinlibrary.interfaces.IChangeSkin;
 
 /**
  * Created by Rrtoyewx on 2016/11/17.
- * SDK.VERSION:>=19
+ * SDK.VERSION:19
  */
 @TargetApi(19)
 public class StatusBarCompat implements IChangeSkin {

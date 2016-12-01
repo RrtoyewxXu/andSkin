@@ -7,6 +7,7 @@
 - 易于扩展，你只需要写下那个属性，另外在AttrFactory.java 注册即可
 - 初始化外部资源失败后，会进行自动切换资源加载，选择上一套或者默认
 - 能够选择是否开启更改状态栏的颜色
+- 支持动态加载的view
 - 更改起来方便，只需要在布局文件中的控件添加如下代码 
 ```
 skin:enable="true"
@@ -93,8 +94,39 @@ skin:enable="true"
      <color name="status_color_red">#FF0000</color>
  ```
 #### 对于外部资源包的时候，可以定义的原来的名字，也可以像更换应用内资源一样定义好后缀名字
- 
- ##如何使用
+
+#### 动态加载view
+这里动态加载view，不只是addView的形式，而是在生成view的时候，比如listView的getView的方法,通常做法为
+```
+    if(contentView==null){
+        contentView = LayoutInflater.from(context).inflate();
+    }
+```
+这里通过inflat的时候加载view的时候，可以理解为广泛的动态加载view，类似的情况还有RecyclerView.onBindViewHolder以及Fragment.onCreateView等,这里需要将布局生成代码换成
+```
+convertView = baseSkinActivity.inflaterView(R.layout.item_main_list, parent, false);
+```
+内部实质是调用SkinLayoutInflater去解析xml布局可能存在需要更改的view
+
+##如何使用
+### 添加依赖 
+gradle
+```
+compile 'com.rrtoyewx.andskinlibrary:andskinlibrary:1.0.0'
+```
+maven
+```
+<dependency>
+  <groupId>com.rrtoyewx.andskinlibrary</groupId>
+  <artifactId>andskinlibrary</artifactId>
+  <version>1.0.0</version>
+  <type>pom</type>
+</dependency>
+```
+
+>2016.12.1 下午add to jcenter, 估计到2016.12.3 审核完
+
+### 修改步骤
 1.Application继承BaseSkinApplication
  对于已经继承其他的Application，可以将BaseSkinApplication的相关代码复制到你的Application中
  ```
