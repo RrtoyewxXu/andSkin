@@ -1,6 +1,12 @@
 # andSkin 
 支持应用内部换肤和外部插件换肤，目前支持background，src，textColor等属性，支持状态栏，方便扩展。
-
+## 效果图
+### 加载应用内的主题
+![](images/loadSkinRed.gif)
+### 加载应用外的主题
+![](images/loadSkinBlue.gif)
+### 加载皮肤皮肤自动还原设置
+![](images/loadSkinGreen.gif)
 ## 优缺点
 ### 优点
 - 相比较多换肤的框架，并没有侵入View的生成过程，仅仅只是占用了LayoutInflaterFactory，如果在使用中需要LayoutInflaterFactory，可以借助LayoutInflater其他的Factory
